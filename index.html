@@ -8,27 +8,33 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;overflow:hidden;background:#87CEEB;touch-action:none;user-select:none;font-family:'Nunito',sans-serif;}
+/* Mobile input fix */
+#ui{touch-action:auto!important;}
+.screen{touch-action:auto!important;pointer-events:all;}
+.card{touch-action:auto!important;overflow-y:visible;}
 #three-canvas{position:fixed;inset:0;width:100%!important;height:100%!important;}
-#ui{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;}
+#ui{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;pointer-events:none;z-index:10;transition:background .4s;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 0;}
 #ui>*{pointer-events:all;}
-.screen{display:none;width:100%;max-width:380px;padding:12px;}
+.screen{display:none;width:100%;max-width:400px;padding:8px 12px;pointer-events:all;}
+/* Dark overlay — toggled via JS class */
+#ui.menu-open{background:rgba(4,2,14,.82);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
 .screen.active{display:block;animation:pop .3s cubic-bezier(.34,1.56,.64,1);}
 @keyframes pop{from{opacity:0;transform:scale(.93) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.card{background:rgba(8,4,22,.95);border:1.5px solid rgba(255,255,255,.1);border-radius:22px;padding:24px 22px;box-shadow:0 28px 80px rgba(0,0,0,.75);}
-.brand{display:flex;align-items:center;gap:9px;margin-bottom:14px;}
-.badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#F47920,#c84a00);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;flex-shrink:0;}
+.card{background:#0d0820;border:1.5px solid rgba(255,255,255,.12);border-radius:22px;padding:24px 22px;box-shadow:0 28px 80px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.04) inset;width:100%;}
+.brand{display:flex;align-items:center;margin-bottom:14px;min-height:40px;}
+.badge{display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;border:none;padding:0;}.badge img{height:38px;width:auto;max-width:190px;min-width:0;object-fit:contain;object-position:left center;display:block;}
 .brt{font-size:9.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F47920;line-height:1.3;}
 .brs{font-size:8.5px;color:#334;}
 .gtitle{font-family:'Fredoka One',cursive;line-height:.9;margin-bottom:5px;}
-.l1{font-size:46px;color:#fff;display:block;}
-.l2{font-size:46px;background:linear-gradient(90deg,#F47920,#ff6bab,#4fb3f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;}
+.l1{font-size:44px;color:#fff;display:block;line-height:1;letter-spacing:-1px;}
+.l2{font-size:44px;background:linear-gradient(90deg,#F47920,#ff6bab,#4fb3f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;line-height:1.05;letter-spacing:-1px;}
 .tag{font-size:12px;color:#445;margin-bottom:15px;line-height:1.5;}
 .saved{background:rgba(244,121,32,.08);border:1.5px solid rgba(244,121,32,.2);border-radius:12px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
 .sa{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F47920,#c84a00);color:#fff;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .snm{font-size:13px;font-weight:800;color:#eef;}.ssc{font-size:11px;color:#445;margin-top:1px;}
 .chg{font-size:10px;color:#334;cursor:pointer;text-decoration:underline;margin-left:auto;flex-shrink:0;align-self:flex-start;}
 .fl{font-size:9.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#334;margin-bottom:3px;margin-top:1px;}
-input[type=text],input[type=email]{width:100%;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 12px;color:#eef;font-size:14px;font-family:'Nunito',sans-serif;margin-bottom:9px;outline:none;transition:border-color .2s;}
+input[type=text],input[type=email]{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 14px;color:#fff;font-size:16px;font-family:'Nunito',sans-serif;margin-bottom:9px;outline:none;transition:border-color .2s;touch-action:auto;-webkit-user-select:text;user-select:text;pointer-events:all;cursor:text;-webkit-appearance:none;appearance:none;}
 input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 .er{font-size:11px;color:#e84040;min-height:14px;margin-bottom:5px;font-weight:700;}
 .btn{width:100%;padding:12px;border-radius:11px;border:none;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:transform .12s;display:block;text-align:center;}
@@ -107,7 +113,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 </head>
 <body>
 <div id="loading">
-  <div class="ltitle">PLAYGROUND DASH</div>
+  <img src="logo.png" alt="Elementary Technology" onerror="this.style.display='none'" style="height:48px;width:auto;max-width:220px;object-fit:contain;object-position:center;margin-bottom:14px;filter:drop-shadow(0 4px 14px rgba(244,121,32,.4));display:block;"><div class="ltitle">PLAYGROUND DASH</div>
   <div class="lsub">Elementary Technology · Building 3D playground…</div>
   <div class="lbar"><div class="lfill" id="lfill" style="width:0%"></div></div>
 </div>
@@ -118,7 +124,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <!-- REGISTER -->
 <div id="s-reg" class="screen">
 <div class="card">
-  <div class="brand"><div class="badge">ET</div><div><div class="brt">Elementary Technology</div><div class="brs">Playground Dash</div></div></div>
+  <div class="brand"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div></div>
   <div class="gtitle"><span class="l1">PLAYGROUND</span><span class="l2">DASH</span></div>
   <p class="tag">Dodge the chaos. Survive the school day. Beat every school. 🏃</p>
   <div id="sw" style="display:none">
@@ -140,7 +146,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <!-- HOW TO -->
 <div id="s-how" class="screen">
 <div class="card">
-  <div class="brand"><div class="badge">ET</div><div><div class="brt">Elementary Technology</div></div></div>
+  <div class="brand"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div></div>
   <h2 style="font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:12px;">How to Play</h2>
   <div class="hw"><div class="hn">1</div><div class="ht">The playground rushes <b>toward you in full 3D</b> — dodge what's coming!</div></div>
   <div class="hw"><div class="hn">2</div><div class="ht"><b>← → Arrow keys</b> or <b>swipe left/right</b> to change lane.</div></div>
@@ -155,8 +161,8 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <!-- GAME OVER -->
 <div id="s-go" class="screen">
 <div class="card" style="text-align:center">
-  <div class="brand" style="justify-content:center;margin-bottom:10px"><div class="badge">ET</div><div><div class="brt">Elementary Technology</div></div></div>
-  <div class="gosub">Game Over!</div>
+  <div class="brand" style="justify-content:center;margin-bottom:10px"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div><div><div class="brt">Elementary Technology</div></div></div>
+  <div class="gosub" id="go-stage">Autumn Term 🍂</div><div class="gosub">Game Over!</div>
   <div class="gos" id="f-sc">0</div>
   <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#445;margin-bottom:2px;">FINAL SCORE</div>
   <div class="gomsg" id="gomsg"></div>
@@ -187,7 +193,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <!-- LEADERBOARD -->
 <div id="s-lb" class="screen">
 <div class="card">
-  <div class="brand"><div class="badge">ET</div><div><div class="brt">Elementary Technology</div></div></div>
+  <div class="brand"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div></div>
   <h2 style="font-family:'Fredoka One',cursive;font-size:25px;margin-bottom:10px;">🏆 Leaderboard</h2>
   <div class="lbt">
     <button class="lbtab on" id="tsc" onclick="swtab('schools')">Schools</button>
@@ -643,35 +649,60 @@ function mkPower(def){
 //        + structural: 'wall_L','wall_R','wall_LR' (barrier walls), 'ramp_L','ramp_R','ramp_C'
 //        + 'star' (collectible), 'power' (power-up)
 
+// ════════════════════════════════════════════════════════
+// POWER-UP DEFS
+// ════════════════════════════════════════════════════════
+const POW_DEFS=[
+  {id:'whistle',  label:'📣 INVINCIBLE!',    colHex:'#ffd84d', dur:5000, weight:2},
+  {id:'coffee',   label:'☕ SPEED BOOST!',   colHex:'#F47920', dur:3500, weight:2},
+  {id:'magnet',   label:'🧲 STAR MAGNET!',   colHex:'#4fb3f6', dur:5000, weight:2},
+  {id:'x2',       label:'✖️2 DOUBLE SCORE!', colHex:'#ff6bab', dur:6000, weight:3},
+  {id:'shield',   label:'🛡️ EXTRA LIFE!',    colHex:'#7ed97f', dur:0,    weight:2},
+  {id:'slowmo',   label:'⏱️ SLOW MOTION!',   colHex:'#c084fc', dur:4000, weight:2},
+  {id:'star_rain',label:'⭐ STAR SHOWER!',   colHex:'#ffd84d', dur:4000, weight:2},
+  {id:'x5score',  label:'🔥 5× COMBO!',      colHex:'#ff4040', dur:5000, weight:1},
+];
+// Weighted random power-up picker
+function randomPowerDef(){
+  const totalW=POW_DEFS.reduce((s,d)=>s+d.weight,0);
+  let r=Math.random()*totalW;
+  for(const d of POW_DEFS){r-=d.weight;if(r<=0)return d;}
+  return POW_DEFS[0];
+}
+
+
+// ════════════════════════════════════════════════════════
+// SEASONAL STAGES  — one per school term + summer
+// ════════════════════════════════════════════════════════
 const CHUNK_PATTERNS=[
-  // 0 — Open road, scattered cones (z>=8 so player has breathing room)
-  [{t:'cone',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:9},{t:'cone',l:2,z:14},{t:'star',l:0,z:15},{t:'bag',l:1,z:19},{t:'star',l:1,z:21}],
-  // 1 — Wall on left, ramp on right
-  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:2,z:2},{t:'star',l:2,z:8,elevated:true},{t:'star',l:2,z:10,elevated:true},{t:'star',l:2,z:12,elevated:true},{t:'cone',l:1,z:12},{t:'parent',l:1,z:18},{t:'star',l:1,z:21}],
-  // 2 — Wall on right, ramp on left
-  [{t:'WALL_R',l:2,z:0},{t:'ramp',l:0,z:2},{t:'star',l:0,z:8,elevated:true},{t:'star',l:0,z:10,elevated:true},{t:'star',l:0,z:12,elevated:true},{t:'fight',l:1,z:15},{t:'cone',l:2,z:21}],
-  // 3 — Two walls force middle lane, bar to duck under
-  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'star',l:1,z:8},{t:'star',l:1,z:11},{t:'bar',l:1,z:14},{t:'star',l:1,z:18},{t:'bag',l:1,z:21}],
-  // 4 — Scatter of bars to duck under, open lanes
-  [{t:'bar',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:9},{t:'bar',l:2,z:14},{t:'star',l:0,z:15},{t:'swingbag',l:1,z:19},{t:'star',l:1,z:21}],
-  // 5 — Slalom cones (only 2 at a time, middle always clear)
-  [{t:'cone',l:0,z:8},{t:'cone',l:2,z:8},{t:'star',l:1,z:9},{t:'cone',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'cone',l:0,z:18},{t:'cone',l:2,z:18},{t:'star',l:1,z:19}],
-  // 6 — Wall left, parent right, ramp centre
-  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:1,z:2},{t:'star',l:1,z:8,elevated:true},{t:'star',l:1,z:10,elevated:true},{t:'parent',l:2,z:10},{t:'star',l:2,z:17},{t:'ball',l:2,z:21}],
-  // 7 — Wall right, snowman left, stars middle
-  [{t:'WALL_R',l:2,z:0},{t:'snow',l:0,z:8},{t:'star',l:1,z:8},{t:'star',l:1,z:12},{t:'star',l:1,z:16},{t:'bar',l:0,z:17},{t:'star',l:1,z:21}],
-  // 8 — Puddles to jump over
-  [{t:'puddle',l:0,z:8},{t:'star',l:1,z:9},{t:'puddle',l:2,z:12},{t:'star',l:0,z:13},{t:'puddle',l:1,z:17},{t:'star',l:2,z:18},{t:'star',l:0,z:21}],
-  // 9 — Both walls, middle only, ball to slide under
-  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'star',l:1,z:8},{t:'star',l:1,z:11},{t:'ball',l:1,z:14},{t:'star',l:1,z:17},{t:'bar',l:1,z:20}],
-  // 10 — Open field, paint + fight
-  [{t:'paint',l:0,z:8},{t:'star',l:1,z:9},{t:'paint',l:2,z:12},{t:'star',l:0,z:13},{t:'fight',l:1,z:16},{t:'star',l:2,z:17},{t:'cone',l:0,z:21}],
-  // 11 — Ramps both sides, obstacles in middle
-  [{t:'ramp',l:0,z:2},{t:'ramp',l:2,z:2},{t:'star',l:0,z:8,elevated:true},{t:'star',l:2,z:8,elevated:true},{t:'star',l:0,z:11,elevated:true},{t:'star',l:2,z:11,elevated:true},{t:'parent',l:1,z:12},{t:'fight',l:1,z:20}],
-  // 12 — Mixed: cone + bar at same time (different lanes, different heights)
-  [{t:'cone',l:0,z:8},{t:'bar',l:2,z:8},{t:'star',l:1,z:9},{t:'cone',l:2,z:14},{t:'bar',l:0,z:14},{t:'star',l:1,z:15},{t:'snow',l:1,z:20}],
-  // 13 — Bag gauntlet (all low, just jump)
-  [{t:'bag',l:0,z:8},{t:'bag',l:2,z:8},{t:'star',l:1,z:9},{t:'bag',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'bag',l:0,z:19},{t:'bag',l:2,z:19}],
+  // 0 — Open road, cones + power-up
+  [{t:'cone',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:9},{t:'power',l:1,z:12},{t:'cone',l:2,z:14},{t:'star',l:0,z:15},{t:'bag',l:1,z:19},{t:'star',l:1,z:21}],
+  // 1 — Wall left, ramp right + power-up on ramp
+  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:2,z:2},{t:'star',l:2,z:8,elevated:true},{t:'power',l:2,z:10,elevated:true},{t:'star',l:2,z:12,elevated:true},{t:'cone',l:1,z:12},{t:'parent',l:1,z:18},{t:'star',l:1,z:21}],
+  // 2 — Wall right, ramp left + power-up
+  [{t:'WALL_R',l:2,z:0},{t:'ramp',l:0,z:2},{t:'star',l:0,z:8,elevated:true},{t:'star',l:0,z:10,elevated:true},{t:'power',l:0,z:12,elevated:true},{t:'fight',l:1,z:15},{t:'cone',l:2,z:21}],
+  // 3 — Two walls force middle, power-up reward
+  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'star',l:1,z:8},{t:'power',l:1,z:10},{t:'bar',l:1,z:14},{t:'star',l:1,z:18},{t:'bag',l:1,z:21}],
+  // 4 — Bars to duck + power-up
+  [{t:'bar',l:0,z:8},{t:'star',l:1,z:9},{t:'power',l:2,z:10},{t:'bar',l:2,z:14},{t:'star',l:0,z:15},{t:'swingbag',l:1,z:19},{t:'star',l:1,z:21}],
+  // 5 — Slalom cones + power-up in gap
+  [{t:'cone',l:0,z:8},{t:'cone',l:2,z:8},{t:'star',l:1,z:9},{t:'power',l:1,z:11},{t:'cone',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'cone',l:0,z:18},{t:'cone',l:2,z:18}],
+  // 6 — Wall left, ramp centre + power-up
+  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:1,z:2},{t:'star',l:1,z:8,elevated:true},{t:'power',l:1,z:9,elevated:true},{t:'parent',l:2,z:10},{t:'star',l:2,z:17},{t:'ball',l:2,z:21}],
+  // 7 — Wall right, stars + power-up
+  [{t:'WALL_R',l:2,z:0},{t:'snow',l:0,z:8},{t:'star',l:1,z:8},{t:'power',l:1,z:11},{t:'star',l:1,z:14},{t:'bar',l:0,z:17},{t:'star',l:1,z:21}],
+  // 8 — Puddles + power-up floating above
+  [{t:'puddle',l:0,z:8},{t:'star',l:1,z:9},{t:'power',l:2,z:10},{t:'puddle',l:2,z:12},{t:'star',l:0,z:13},{t:'puddle',l:1,z:17},{t:'star',l:2,z:18}],
+  // 9 — Both walls middle, power-up reward
+  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'power',l:1,z:8},{t:'star',l:1,z:11},{t:'ball',l:1,z:14},{t:'star',l:1,z:17},{t:'bar',l:1,z:20}],
+  // 10 — Open, paint + fight + power-up
+  [{t:'paint',l:0,z:8},{t:'star',l:1,z:9},{t:'power',l:0,z:10},{t:'paint',l:2,z:12},{t:'fight',l:1,z:16},{t:'star',l:2,z:17},{t:'cone',l:0,z:21}],
+  // 11 — Ramps both sides + power-ups on top
+  [{t:'ramp',l:0,z:2},{t:'ramp',l:2,z:2},{t:'power',l:0,z:8,elevated:true},{t:'power',l:2,z:8,elevated:true},{t:'star',l:0,z:11,elevated:true},{t:'star',l:2,z:11,elevated:true},{t:'parent',l:1,z:12},{t:'fight',l:1,z:20}],
+  // 12 — Mixed cone+bar + power-up
+  [{t:'cone',l:0,z:8},{t:'bar',l:2,z:8},{t:'power',l:1,z:9},{t:'cone',l:2,z:14},{t:'bar',l:0,z:14},{t:'star',l:1,z:15},{t:'snow',l:1,z:20}],
+  // 13 — Bag gauntlet + power-up bonus
+  [{t:'bag',l:0,z:8},{t:'bag',l:2,z:8},{t:'star',l:1,z:9},{t:'power',l:1,z:11},{t:'bag',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'bag',l:0,z:19}],
 ];
 
 // Wall builder — a long solid barrier in one lane
@@ -790,7 +821,9 @@ function spawnChunk(){
     }
     if(spec.t==='power'){
       const def=randomPowerDef();
-      const m=mkPower(def);m.position.set(laneX,1.15,specZ);
+      const m=mkPower(def);
+      const powY=spec.elevated?1.85:1.25;
+      m.position.set(laneX,powY,specZ);
       group.add(m);chunk.props.push({mesh:m,spec,isPower:true,def});
       return;
     }
@@ -842,25 +875,65 @@ function spawnChunk(){
 // Seed initial chunks
 for(let i=0;i<5;i++) spawnChunk();
 
-// ════════════════════════════════════════════════════════
-// POWER-UP DEFS
-// ════════════════════════════════════════════════════════
-const POW_DEFS=[
-  {id:'whistle',  label:'📣 INVINCIBLE!',    colHex:'#ffd84d', dur:5000, weight:2},
-  {id:'coffee',   label:'☕ SPEED BOOST!',   colHex:'#F47920', dur:3500, weight:2},
-  {id:'magnet',   label:'🧲 STAR MAGNET!',   colHex:'#4fb3f6', dur:5000, weight:2},
-  {id:'x2',       label:'✖️2 DOUBLE SCORE!', colHex:'#ff6bab', dur:6000, weight:3},
-  {id:'shield',   label:'🛡️ EXTRA LIFE!',    colHex:'#7ed97f', dur:0,    weight:2},
-  {id:'slowmo',   label:'⏱️ SLOW MOTION!',   colHex:'#c084fc', dur:4000, weight:2},
-  {id:'star_rain',label:'⭐ STAR SHOWER!',   colHex:'#ffd84d', dur:4000, weight:2},
-  {id:'x5score',  label:'🔥 5× COMBO!',      colHex:'#ff4040', dur:5000, weight:1},
+const STAGES=[
+  {
+    name:'Autumn Term 🍂',
+    dist:0,
+    sky:0xE8A87C,      skyFog:0xD4956A,
+    grass:0x8B7355,    track:0xA09070,
+    ambientCol:0xFFE0C0, sunCol:0xFFD080,
+    particleCol:'#D2691E', particleCol2:'#FF6B35',
+    fogColor:0xE8A87C,
+    desc:'Back to school! Watch out for falling leaves 🍂',
+  },
+  {
+    name:'Winter Term ❄️',
+    dist:500,
+    sky:0xB8D4E8,      skyFog:0xC8DCF0,
+    grass:0xD8E8F0,    track:0xC0D0DC,
+    ambientCol:0xD0E8FF, sunCol:0xFFFFE0,
+    particleCol:'#FFFFFF', particleCol2:'#B0D8FF',
+    fogColor:0xC8DCF0,
+    desc:'Brrr! Icy playground ahead ❄️',
+  },
+  {
+    name:'Spring Term 🌸',
+    dist:1000,
+    sky:0x87CEEB,      skyFog:0xA8DFF0,
+    grass:0x7EC850,    track:0xB0A898,
+    ambientCol:0xFFFFE8, sunCol:0xFFFF80,
+    particleCol:'#FFB7C5', particleCol2:'#98FB98',
+    fogColor:0x87CEEB,
+    desc:'Flowers blooming — dodge the bees! 🌸',
+  },
+  {
+    name:'Summer Holiday 🌞',
+    dist:2000,
+    sky:0x4FC3F7,      skyFog:0x81D4FA,
+    grass:0x5CB85C,    track:0xD4C8A0,
+    ambientCol:0xFFF8E1, sunCol:0xFFEB3B,
+    particleCol:'#FFD700', particleCol2:'#FFA500',
+    fogColor:0x81D4FA,
+    desc:'Last day of term CHAOS! 🌞',
+  },
 ];
-// Weighted random power-up picker
-function randomPowerDef(){
-  const totalW=POW_DEFS.reduce((s,d)=>s+d.weight,0);
-  let r=Math.random()*totalW;
-  for(const d of POW_DEFS){r-=d.weight;if(r<=0)return d;}
-  return POW_DEFS[0];
+
+let currentStage=0;
+let stageParticleTimer=0;
+
+function getStage(){ return STAGES[currentStage]; }
+
+function updateStage(){
+  const stg=getStage();
+  // Sky
+  renderer.setClearColor(stg.sky);
+  scene.fog.color.setHex(stg.fogColor);
+  // Lights
+  ambient.color.setHex(stg.ambientCol);
+  sun.color.setHex(stg.sunCol);
+  // Grass
+  [grassL,grassR].forEach(g=>g.material.color.setHex(stg.grass));
+  gnd.material.color.setHex(stg.track);
 }
 
 // ════════════════════════════════════════════════════════
@@ -1233,7 +1306,13 @@ function startMusic(){
 // ════════════════════════════════════════════════════════
 function showS(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  if(id!=='__game__')document.getElementById(id).classList.add('active');
+  const ui=document.getElementById('ui');
+  if(id!=='__game__'){
+    document.getElementById(id).classList.add('active');
+    ui.classList.add('menu-open');
+  } else {
+    ui.classList.remove('menu-open');
+  }
   document.getElementById('hud').classList.remove('show');
   document.getElementById('hint').classList.remove('show');
 }
@@ -1317,6 +1396,9 @@ document.addEventListener('keydown',e=>{
 
 // Touch — non-passive so we can preventDefault (stops browser scroll/zoom)
 document.addEventListener('touchstart',e=>{
+  // Don't interfere with input fields or buttons on UI screens
+  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA') return;
+  if(!GA) return; // don't block menu touches
   e.preventDefault();
   tSX=e.touches[0].clientX;
   tSY=e.touches[0].clientY;
@@ -1325,8 +1407,9 @@ document.addEventListener('touchstart',e=>{
 
 // Act on touchmove as soon as threshold crossed — feels instant like Subway Surfers
 document.addEventListener('touchmove',e=>{
-  e.preventDefault();
+  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA') return;
   if(!GA||tSwiped)return;
+  e.preventDefault();
   const dx=e.touches[0].clientX-tSX;
   const dy=e.touches[0].clientY-tSY;
   const ax=Math.abs(dx),ay=Math.abs(dy);
@@ -1346,8 +1429,9 @@ document.addEventListener('touchmove',e=>{
 
 // Touchend — handle tap (very short touch with no real movement)
 document.addEventListener('touchend',e=>{
-  e.preventDefault();
+  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA') return;
   if(!GA||tSwiped)return;
+  e.preventDefault();
   const dx=e.changedTouches[0].clientX-tSX;
   const dy=e.changedTouches[0].clientY-tSY;
   // If essentially no movement, treat as tap → jump
@@ -1601,6 +1685,33 @@ function update(dt){
   const ms=MILESTONES[nextMilestone];
   if(ms&&dist>=ms){nextMilestone++;showMilestone(ms+'m!');sfxMilestone();}
 
+  // ── Stage / season check ──
+  const nextStageIdx=STAGES.findIndex((s,i)=>i>currentStage&&dist>=s.dist);
+  if(nextStageIdx>currentStage){
+    currentStage=nextStageIdx;
+    updateStage();
+    showMilestone(STAGES[currentStage].name);
+    sfxMilestone();
+  }
+
+  // ── Stage ambient particles (leaves/snow/petals) ──
+  stageParticleTimer-=dt;
+  if(stageParticleTimer<=0&&pCtx){
+    stageParticleTimer=0.12+Math.random()*0.08;
+    const stg=getStage();
+    // Spawn floating particle from random position
+    const sx=Math.random()*window.innerWidth;
+    particles2d.push({
+      x:sx, y:-10,
+      vx:(Math.random()-0.5)*1.5,
+      vy:0.8+Math.random()*1.2,
+      life:1, r:3+Math.random()*4,
+      col:Math.random()<0.5?stg.particleCol:stg.particleCol2,
+      rot:Math.random()*Math.PI*2, rotV:(Math.random()-0.5)*0.1,
+      isSeasonal:true
+    });
+  }
+
   // ── Update 2D particles ──
   update2dParticles(dt);
 
@@ -1743,12 +1854,42 @@ function update2dParticles(dt){
   pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
   for(let i=particles2d.length-1;i>=0;i--){
     const p=particles2d[i];
-    p.x+=p.vx*dt*60;p.y+=p.vy*dt*60;p.vy+=8*dt;
-    p.life-=dt*1.8;
-    if(p.life<=0){particles2d.splice(i,1);continue;}
-    pCtx.globalAlpha=p.life;
+    p.x+=p.vx*dt*60; p.y+=p.vy*dt*60;
+    if(p.isSeasonal){
+      // Seasonal particles drift and spin, don't fall fast, loop off bottom
+      p.vy=Math.min(p.vy+0.5*dt, 2.5);
+      p.rot=(p.rot||0)+(p.rotV||0);
+      if(p.y>window.innerHeight+20){particles2d.splice(i,1);continue;}
+      p.life=0.7+Math.sin(Date.now()/800+i)*0.3; // constant opacity
+    } else {
+      p.vy+=8*dt;
+      p.life-=dt*1.8;
+      if(p.life<=0){particles2d.splice(i,1);continue;}
+    }
+    pCtx.save();
+    pCtx.globalAlpha=Math.max(0,Math.min(1,p.life));
     pCtx.fillStyle=p.col;
-    pCtx.beginPath();pCtx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2);pCtx.fill();
+    if(p.isSeasonal&&p.rot!==undefined){
+      pCtx.translate(p.x,p.y);
+      pCtx.rotate(p.rot);
+      // Draw as a small leaf/flake shape
+      const stg=getStage();
+      if(stg.name.includes('❄️')){
+        // Snowflake: 6 lines
+        for(let s=0;s<6;s++){
+          pCtx.save();pCtx.rotate(s*Math.PI/3);
+          pCtx.fillRect(-0.8,-p.r,1.6,p.r*2);
+          pCtx.restore();
+        }
+      } else {
+        // Leaf/petal: rounded oval
+        pCtx.beginPath();pCtx.ellipse(0,0,p.r*0.5,p.r,0,0,Math.PI*2);pCtx.fill();
+      }
+      pCtx.translate(-p.x,-p.y);
+    } else {
+      pCtx.beginPath();pCtx.arc(p.x,p.y,p.r*Math.max(0.1,p.life),0,Math.PI*2);pCtx.fill();
+    }
+    pCtx.restore();
   }
   pCtx.globalAlpha=1;
 }
@@ -1796,6 +1937,7 @@ function endGame(){
   saveLB(bestVal);
 
   // Populate breakdown
+  document.getElementById('go-stage').textContent=STAGES[currentStage].name;
   document.getElementById('f-sc').textContent=finalScore.toLocaleString();
   document.getElementById('br-stars').textContent=starCount+' × 10 = '+starScore.toLocaleString();
   document.getElementById('br-dist').textContent='+'+distBonus.toLocaleString();
@@ -1858,7 +2000,7 @@ function fakeLoad(){
     setTimeout(()=>{
       const ld=document.getElementById('loading');ld.style.opacity='0';
       setTimeout(()=>ld.style.display='none',500);
-      showS('s-reg');
+      showS('s-reg'); document.getElementById('ui').classList.add('menu-open');
       const p=loadP();
       if(p){PL=p;document.getElementById('sav-av').textContent=p.name.charAt(0).toUpperCase();document.getElementById('sav-nm').textContent=p.name;document.getElementById('sav-ss').textContent=p.school+(p.best>0?' · Best: '+p.best+'m':'');document.getElementById('sw').style.display='block';document.getElementById('nw').style.display='none';}
       function idle(t){
