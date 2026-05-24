@@ -58,16 +58,25 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 #mult-label{font-family:'Fredoka One',cursive;font-size:20px;color:#ffd84d;text-shadow:0 0 8px #ff8800;min-width:36px;}
 #mult-track{flex:1;height:7px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.08);}
 #mult-fill{height:100%;background:linear-gradient(90deg,#F47920,#ffd84d);border-radius:4px;transition:width .15s;}
-/* Milestone popup */
-#milestone{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:50;pointer-events:none;
-  font-family:'Fredoka One',cursive;font-size:38px;color:#fff;
-  text-shadow:0 0 20px #F47920,0 4px 0 rgba(0,0,0,.5);
-  background:rgba(244,121,32,.15);backdrop-filter:blur(8px);
-  border:2px solid rgba(244,121,32,.5);border-radius:16px;
-  padding:10px 28px;white-space:nowrap;
-  transition:transform .18s cubic-bezier(.34,1.56,.64,1),opacity .3s;}
-#milestone.show{transform:translate(-50%,-50%) scale(1);}
-#milestone.hide{opacity:0;}
+/* Milestone banner — slim toast at the top */
+#milestone{
+  position:fixed;top:-80px;left:50%;transform:translateX(-50%);
+  z-index:50;pointer-events:none;
+  font-family:'Fredoka One',cursive;font-size:22px;color:#fff;
+  text-shadow:0 2px 6px rgba(0,0,0,.5);
+  background:linear-gradient(135deg,rgba(244,121,32,.95),rgba(200,74,0,.95));
+  backdrop-filter:blur(8px);
+  border:1.5px solid rgba(255,255,255,.2);border-radius:0 0 18px 18px;
+  padding:10px 28px 12px;white-space:nowrap;
+  box-shadow:0 8px 32px rgba(244,121,32,.5);
+  transition:top .3s cubic-bezier(.34,1.2,.64,1),opacity .3s;
+  display:flex;align-items:center;gap:10px;
+}
+#milestone .ms-icon{font-size:26px;}
+#milestone .ms-text{display:flex;flex-direction:column;line-height:1.1;}
+#milestone .ms-label{font-size:11px;opacity:.8;letter-spacing:1px;text-transform:uppercase;font-family:'Nunito',sans-serif;font-weight:700;}
+#milestone.show{top:0;}
+#milestone.hide{opacity:0;top:-80px;}
 /* Particle overlay */
 #pcanvas{position:fixed;inset:0;pointer-events:none;z-index:15;}
 /* Sound toggle */
@@ -678,31 +687,31 @@ const CHUNK_PATTERNS=[
   // 0 — Open road, cones + power-up
   [{t:'cone',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:9},{t:'power',l:1,z:12},{t:'cone',l:2,z:14},{t:'star',l:0,z:15},{t:'bag',l:1,z:19},{t:'star',l:1,z:21}],
   // 1 — Wall left, ramp right + power-up on ramp
-  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:2,z:2},{t:'star',l:2,z:8,elevated:true},{t:'power',l:2,z:10,elevated:true},{t:'star',l:2,z:12,elevated:true},{t:'cone',l:1,z:12},{t:'parent',l:1,z:18},{t:'star',l:1,z:21}],
+  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:2,z:2},{t:'star',l:2,z:8,elevated:true},{t:'star',l:2,z:10,elevated:true},{t:'star',l:2,z:12,elevated:true},{t:'cone',l:1,z:12},{t:'parent',l:1,z:18},{t:'star',l:1,z:21}],
   // 2 — Wall right, ramp left + power-up
-  [{t:'WALL_R',l:2,z:0},{t:'ramp',l:0,z:2},{t:'star',l:0,z:8,elevated:true},{t:'star',l:0,z:10,elevated:true},{t:'power',l:0,z:12,elevated:true},{t:'fight',l:1,z:15},{t:'cone',l:2,z:21}],
+  [{t:'WALL_R',l:2,z:0},{t:'ramp',l:0,z:2},{t:'star',l:0,z:8,elevated:true},{t:'star',l:0,z:10,elevated:true},{t:'star',l:0,z:12,elevated:true},{t:'fight',l:1,z:15},{t:'cone',l:2,z:21}],
   // 3 — Two walls force middle, power-up reward
   [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'star',l:1,z:8},{t:'power',l:1,z:10},{t:'bar',l:1,z:14},{t:'star',l:1,z:18},{t:'bag',l:1,z:21}],
   // 4 — Bars to duck + power-up
-  [{t:'bar',l:0,z:8},{t:'star',l:1,z:9},{t:'power',l:2,z:10},{t:'bar',l:2,z:14},{t:'star',l:0,z:15},{t:'swingbag',l:1,z:19},{t:'star',l:1,z:21}],
+  [{t:'bar',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:10},{t:'bar',l:2,z:14},{t:'star',l:0,z:15},{t:'swingbag',l:1,z:19},{t:'star',l:1,z:21}],
   // 5 — Slalom cones + power-up in gap
-  [{t:'cone',l:0,z:8},{t:'cone',l:2,z:8},{t:'star',l:1,z:9},{t:'power',l:1,z:11},{t:'cone',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'cone',l:0,z:18},{t:'cone',l:2,z:18}],
+  [{t:'cone',l:0,z:8},{t:'cone',l:2,z:8},{t:'star',l:1,z:9},{t:'star',l:1,z:11},{t:'cone',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'cone',l:0,z:18},{t:'cone',l:2,z:18}],
   // 6 — Wall left, ramp centre + power-up
   [{t:'WALL_L',l:0,z:0},{t:'ramp',l:1,z:2},{t:'star',l:1,z:8,elevated:true},{t:'power',l:1,z:9,elevated:true},{t:'parent',l:2,z:10},{t:'star',l:2,z:17},{t:'ball',l:2,z:21}],
   // 7 — Wall right, stars + power-up
-  [{t:'WALL_R',l:2,z:0},{t:'snow',l:0,z:8},{t:'star',l:1,z:8},{t:'power',l:1,z:11},{t:'star',l:1,z:14},{t:'bar',l:0,z:17},{t:'star',l:1,z:21}],
+  [{t:'WALL_R',l:2,z:0},{t:'snow',l:0,z:8},{t:'star',l:1,z:8},{t:'star',l:1,z:11},{t:'star',l:1,z:14},{t:'bar',l:0,z:17},{t:'star',l:1,z:21}],
   // 8 — Puddles + power-up floating above
-  [{t:'puddle',l:0,z:8},{t:'star',l:1,z:9},{t:'power',l:2,z:10},{t:'puddle',l:2,z:12},{t:'star',l:0,z:13},{t:'puddle',l:1,z:17},{t:'star',l:2,z:18}],
+  [{t:'puddle',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:10},{t:'puddle',l:2,z:12},{t:'star',l:0,z:13},{t:'puddle',l:1,z:17},{t:'star',l:2,z:18}],
   // 9 — Both walls middle, power-up reward
   [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'power',l:1,z:8},{t:'star',l:1,z:11},{t:'ball',l:1,z:14},{t:'star',l:1,z:17},{t:'bar',l:1,z:20}],
   // 10 — Open, paint + fight + power-up
-  [{t:'paint',l:0,z:8},{t:'star',l:1,z:9},{t:'power',l:0,z:10},{t:'paint',l:2,z:12},{t:'fight',l:1,z:16},{t:'star',l:2,z:17},{t:'cone',l:0,z:21}],
+  [{t:'paint',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:0,z:10},{t:'paint',l:2,z:12},{t:'fight',l:1,z:16},{t:'star',l:2,z:17},{t:'cone',l:0,z:21}],
   // 11 — Ramps both sides + power-ups on top
-  [{t:'ramp',l:0,z:2},{t:'ramp',l:2,z:2},{t:'power',l:0,z:8,elevated:true},{t:'power',l:2,z:8,elevated:true},{t:'star',l:0,z:11,elevated:true},{t:'star',l:2,z:11,elevated:true},{t:'parent',l:1,z:12},{t:'fight',l:1,z:20}],
+  [{t:'ramp',l:0,z:2},{t:'ramp',l:2,z:2},{t:'star',l:0,z:8,elevated:true},{t:'power',l:2,z:8,elevated:true},{t:'star',l:0,z:11,elevated:true},{t:'star',l:2,z:11,elevated:true},{t:'parent',l:1,z:12},{t:'fight',l:1,z:20}],
   // 12 — Mixed cone+bar + power-up
   [{t:'cone',l:0,z:8},{t:'bar',l:2,z:8},{t:'power',l:1,z:9},{t:'cone',l:2,z:14},{t:'bar',l:0,z:14},{t:'star',l:1,z:15},{t:'snow',l:1,z:20}],
   // 13 — Bag gauntlet + power-up bonus
-  [{t:'bag',l:0,z:8},{t:'bag',l:2,z:8},{t:'star',l:1,z:9},{t:'power',l:1,z:11},{t:'bag',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'bag',l:0,z:19}],
+  [{t:'bag',l:0,z:8},{t:'bag',l:2,z:8},{t:'star',l:1,z:9},{t:'star',l:1,z:11},{t:'bag',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'bag',l:0,z:19}],
 ];
 
 // Wall builder — a long solid barrier in one lane
@@ -879,42 +888,46 @@ const STAGES=[
   {
     name:'Autumn Term 🍂',
     dist:0,
-    sky:0xE8A87C,      skyFog:0xD4956A,
-    grass:0x8B7355,    track:0xA09070,
+    sky:0xE8A87C,       skyFog:0xD4956A,
+    grass:0x8B7355,     track:0xA09070,
     ambientCol:0xFFE0C0, sunCol:0xFFD080,
     particleCol:'#D2691E', particleCol2:'#FF6B35',
     fogColor:0xE8A87C,
     desc:'Back to school! Watch out for falling leaves 🍂',
+    trackAccent:0xc87040,
   },
   {
     name:'Winter Term ❄️',
-    dist:500,
-    sky:0xB8D4E8,      skyFog:0xC8DCF0,
-    grass:0xD8E8F0,    track:0xC0D0DC,
+    dist:300,
+    sky:0xB8D4E8,       skyFog:0xC8DCF0,
+    grass:0xD8E8F0,     track:0xC0D0DC,
     ambientCol:0xD0E8FF, sunCol:0xFFFFE0,
     particleCol:'#FFFFFF', particleCol2:'#B0D8FF',
     fogColor:0xC8DCF0,
     desc:'Brrr! Icy playground ahead ❄️',
+    trackAccent:0x8ab0cc,
   },
   {
     name:'Spring Term 🌸',
-    dist:1000,
-    sky:0x87CEEB,      skyFog:0xA8DFF0,
-    grass:0x7EC850,    track:0xB0A898,
+    dist:600,
+    sky:0x87CEEB,       skyFog:0xA8DFF0,
+    grass:0x7EC850,     track:0xB0C898,
     ambientCol:0xFFFFE8, sunCol:0xFFFF80,
     particleCol:'#FFB7C5', particleCol2:'#98FB98',
     fogColor:0x87CEEB,
-    desc:'Flowers blooming — dodge the bees! 🌸',
+    desc:'Flowers blooming — watch your step! 🌸',
+    trackAccent:0x88cc88,
   },
   {
     name:'Summer Holiday 🌞',
-    dist:2000,
-    sky:0x4FC3F7,      skyFog:0x81D4FA,
-    grass:0x5CB85C,    track:0xD4C8A0,
+    dist:1200,
+    sky:0x4FC3F7,       skyFog:0x81D4FA,
+    grass:0x5CB85C,     track:0xD4C8A0,
     ambientCol:0xFFF8E1, sunCol:0xFFEB3B,
     particleCol:'#FFD700', particleCol2:'#FFA500',
     fogColor:0x81D4FA,
     desc:'Last day of term CHAOS! 🌞',
+    trackAccent:0xd4aa40,
   },
 ];
 
@@ -924,16 +937,18 @@ let stageParticleTimer=0;
 function getStage(){ return STAGES[currentStage]; }
 
 function updateStage(){
-  const stg=getStage();
-  // Sky
-  renderer.setClearColor(stg.sky);
-  scene.fog.color.setHex(stg.fogColor);
-  // Lights
-  ambient.color.setHex(stg.ambientCol);
-  sun.color.setHex(stg.sunCol);
-  // Grass
-  [grassL,grassR].forEach(g=>g.material.color.setHex(stg.grass));
-  gnd.material.color.setHex(stg.track);
+  try{
+    const stg=getStage();
+    if(!stg)return;
+    renderer.setClearColor(stg.sky);
+    if(scene.fog) scene.fog.color.setHex(stg.fogColor);
+    if(ambient) ambient.color.setHex(stg.ambientCol);
+    if(sun) sun.color.setHex(stg.sunCol);
+    if(grassL&&grassL.material) grassL.material.color.setHex(stg.grass);
+    if(grassR&&grassR.material) grassR.material.color.setHex(stg.grass);
+    if(gnd&&gnd.material) gnd.material.color.setHex(stg.track);
+    trackTiles.forEach((t,i)=>{if(t&&t.material)t.material.color.setHex(i%2===0?stg.track:stg.trackAccent||stg.track);});
+  }catch(e){console.warn('updateStage error:',e);}
 }
 
 // ════════════════════════════════════════════════════════
@@ -949,7 +964,7 @@ let slowMo=false,slowMoTimer=0;
 let starRain=false,starRainTimer=0,starRainSpawnCD=0;
 let comboLocked=false,comboLockedTimer=0; // x5 power locks combo at max
 let shakeMag=0;
-const MILESTONES=[100,250,500,1000,2000,5000];
+const MILESTONES=[100,200,400,500,800,1000,1500,2000,3000,5000];
 let nextMilestone=0;
 // 2D particle system on overlay canvas
 let pCtx=null,pCanvas=null,particles2d=[];
@@ -1682,17 +1697,17 @@ function update(dt){
   });
 
   // ── Milestone check ──
-  const ms=MILESTONES[nextMilestone];
-  if(ms&&dist>=ms){nextMilestone++;showMilestone(ms+'m!');sfxMilestone();}
+  try{const ms=MILESTONES[nextMilestone];if(ms&&dist>=ms){nextMilestone++;showMilestone(ms+'m!');sfxMilestone();}}catch(e){}
 
   // ── Stage / season check ──
-  const nextStageIdx=STAGES.findIndex((s,i)=>i>currentStage&&dist>=s.dist);
-  if(nextStageIdx>currentStage){
-    currentStage=nextStageIdx;
-    updateStage();
-    showMilestone(STAGES[currentStage].name);
-    sfxMilestone();
-  }
+  try{
+    if(currentStage<STAGES.length-1&&dist>=STAGES[currentStage+1].dist){
+      currentStage++;
+      updateStage();
+      showMilestone(STAGES[currentStage].name);
+      sfxMilestone();
+    }
+  }catch(e){console.warn('Stage:',e);}
 
   // ── Stage ambient particles (leaves/snow/petals) ──
   stageParticleTimer-=dt;
@@ -1894,10 +1909,23 @@ function update2dParticles(dt){
   pCtx.globalAlpha=1;
 }
 
-function showMilestone(txt){
+function showMilestone(txt, icon, label){
   const el=document.getElementById('milestone');
-  el.textContent=txt;el.className='show';
-  setTimeout(()=>{el.classList.add('hide');setTimeout(()=>{el.className='';},350);},1800);
+  // Determine icon and label from text if not provided
+  if(!icon){
+    if(txt.includes('🍂')){icon='🍂';label='AUTUMN TERM';}
+    else if(txt.includes('❄️')){icon='❄️';label='WINTER TERM';}
+    else if(txt.includes('🌸')){icon='🌸';label='SPRING TERM';}
+    else if(txt.includes('🌞')){icon='☀️';label='SUMMER HOLIDAY';}
+    else if(txt.includes('m!')){icon='🏃';label='DISTANCE';}
+    else{icon='🎉';label='MILESTONE';}
+  }
+  el.innerHTML=`<span class="ms-icon">${icon}</span><span class="ms-text"><span class="ms-label">${label||''}</span>${txt}</span>`;
+  el.className='show';
+  setTimeout(()=>{
+    el.classList.add('hide');
+    setTimeout(()=>{el.className='';},400);
+  },2200);
 }
 
 function showScorePop(txt,meshPos,groupPos){
@@ -1916,13 +1944,15 @@ function showScorePop(txt,meshPos,groupPos){
 // END GAME
 // ════════════════════════════════════════════════════════
 function endGame(){
+  if(!GA)return;
   GA=false;
-  // Game over sound
-  if(AC){osc(200,'sawtooth',0.15,0.5);osc(150,'sawtooth',0.2,0.4,sfxGain,0.12);osc(100,'sine',0.3,0.3,sfxGain,0.25);}
+  cancelAnimationFrame(raf2);
+  if(AC){try{osc(200,'sawtooth',0.15,0.5);osc(150,'sawtooth',0.2,0.4,sfxGain,0.12);osc(100,'sine',0.3,0.3,sfxGain,0.25);}catch(e){}}
   document.getElementById('hud').classList.remove('show');
   document.getElementById('hint').classList.remove('show');
   document.getElementById('pbadge').classList.remove('show');
   document.getElementById('snd-btn').classList.remove('show');
+  document.getElementById('milestone').className='';
   const distM=Math.floor(dist);
 
   // ── Score breakdown ──
