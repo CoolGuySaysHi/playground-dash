@@ -118,6 +118,54 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 .lsub{font-size:12px;color:#445;margin-bottom:22px;}
 .lbar{width:180px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;}
 .lfill{height:100%;background:linear-gradient(90deg,#F47920,#ff6bab);border-radius:2px;transition:width .25s;}
+.brutal-mode #hud{border-bottom:2px solid rgba(255,50,50,.45);}
+
+/* ── OFSTED MODE ── */
+#ofsted-warning{
+  position:fixed;top:-100px;left:0;right:0;
+  background:linear-gradient(135deg,#c0392b,#922b21);
+  color:#fff;text-align:center;
+  padding:12px 20px 14px;z-index:60;
+  pointer-events:none;
+  transition:top .35s cubic-bezier(.34,1.2,.64,1);
+  border-bottom:3px solid #ff6b6b;
+  box-shadow:0 8px 40px rgba(192,57,43,.7);
+}
+#ofsted-warning.show{top:0;}
+#ofsted-title{font-family:'Fredoka One',cursive;font-size:22px;letter-spacing:1px;}
+#ofsted-sub{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-top:2px;}
+#ofsted-timer{font-family:'Fredoka One',cursive;font-size:28px;color:#ffd84d;margin-top:2px;text-shadow:0 0 10px rgba(255,216,77,.6);}
+
+/* Red vignette when Ofsted active */
+#ofsted-vignette{
+  position:fixed;inset:0;pointer-events:none;z-index:14;
+  box-shadow:inset 0 0 80px rgba(192,57,43,0) ;
+  transition:box-shadow .5s;
+}
+#ofsted-vignette.show{
+  box-shadow:inset 0 0 80px rgba(192,57,43,.55);
+  animation:ofstedPulse 1.2s ease-in-out infinite;
+}
+@keyframes ofstedPulse{
+  0%,100%{box-shadow:inset 0 0 80px rgba(192,57,43,.4);}
+  50%{box-shadow:inset 0 0 120px rgba(192,57,43,.75);}
+}
+
+/* Inspector survived bonus popup */
+#ofsted-bonus{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+  z-index:70;pointer-events:none;
+  background:linear-gradient(135deg,rgba(39,174,96,.95),rgba(27,120,68,.95));
+  border:2px solid rgba(255,255,255,.3);border-radius:20px;
+  padding:18px 32px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;
+}
+#ofsted-bonus.show{transform:translate(-50%,-50%) scale(1);}
+#ofsted-bonus.hide{opacity:0;}
+#ofsted-bonus-title{font-family:'Fredoka One',cursive;font-size:32px;color:#fff;}
+#ofsted-bonus-pts{font-family:'Fredoka One',cursive;font-size:52px;color:#ffd84d;text-shadow:0 0 20px rgba(255,216,77,.6);}
+#ofsted-bonus-sub{font-size:12px;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:2px;margin-top:4px;}
 </style>
 </head>
 <body>
@@ -220,6 +268,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
     <div class="hb"><div class="hl">Score</div><div class="hv" id="h-score" style="color:#ffd84d">0</div></div>
     <div class="hb" style="min-width:80px"><div class="hl">Lives</div><div class="hlv"><span class="hrt" id="hrt1">❤️</span><span class="hrt" id="hrt2">❤️</span><span class="hrt" id="hrt3">❤️</span></div></div>
   </div>
+  <div id="diff-badge" style="text-align:center;margin-top:3px;font-size:10px;font-weight:700;letter-spacing:1px;opacity:0.75;color:#aaa;"></div>
   <div id="mult-bar">
     <div id="mult-label">×1</div>
     <div id="mult-track"><div id="mult-fill" style="width:0%"></div></div>
@@ -233,6 +282,18 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <div id="pbadge"></div>
 <div id="snd-btn" onclick="toggleSound()" title="Toggle sound">🔊</div>
 <div id="hint">swipe left/right · swipe up to jump · swipe down to slide</div>
+
+<div id="ofsted-warning">
+  <div id="ofsted-title">📋 OFSTED INSPECTION!</div>
+  <div id="ofsted-sub">The inspector is watching — don't mess up!</div>
+  <div id="ofsted-timer">30</div>
+</div>
+<div id="ofsted-vignette"></div>
+<div id="ofsted-bonus">
+  <div id="ofsted-bonus-title">✅ OUTSTANDING!</div>
+  <div id="ofsted-bonus-pts">+500</div>
+  <div id="ofsted-bonus-sub">You survived the inspection!</div>
+</div>
 <div id="swipe-flash" style="
   position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);
   font-family:'Fredoka One',cursive;font-size:52px;color:#fff;
@@ -483,6 +544,91 @@ function buildPlayer(){
 const PLAYER=buildPlayer();
 
 // ════════════════════════════════════════════════════════
+// OFSTED INSPECTOR MODEL
+// ════════════════════════════════════════════════════════
+function buildInspector(){
+  const g=new THREE.Group();
+  const add=(geo,m,x,y,z)=>{const mesh=new THREE.Mesh(geo,m);mesh.position.set(x,y,z);mesh.castShadow=true;g.add(mesh);return mesh;};
+
+  // Suit (dark grey)
+  const suitM=new THREE.MeshLambertMaterial({color:0x2c3e50});
+  const shirtM=new THREE.MeshLambertMaterial({color:0xecf0f1});
+  const skinM=new THREE.MeshLambertMaterial({color:0xFFCCBC});
+  const hairM=new THREE.MeshLambertMaterial({color:0x1a1a2e});
+  const tieM=new THREE.MeshLambertMaterial({color:0xc0392b});
+  const clipboardM=new THREE.MeshLambertMaterial({color:0xd4a843});
+  const paperM=new THREE.MeshLambertMaterial({color:0xffffff});
+  const glassesM=new THREE.MeshLambertMaterial({color:0x222222});
+
+  // Body — wider/stockier than player (imposing)
+  add(new THREE.BoxGeometry(.85,.95,.48),suitM,    0,1.18,0);
+  add(new THREE.BoxGeometry(.28,.6,.5), shirtM,    0,1.12,0); // shirt
+  // Tie
+  add(new THREE.BoxGeometry(.1,.55,.52),tieM,      0,1.05,0);
+  // Trousers
+  add(new THREE.BoxGeometry(.82,.65,.46),suitM,    0,0.55,0);
+  // Jacket lapels
+  const lapelL=add(new THREE.BoxGeometry(.22,.5,.5),suitM,-0.22,1.12,0);
+  const lapelR=add(new THREE.BoxGeometry(.22,.5,.5),suitM, 0.22,1.12,0);
+
+  // Head — slightly larger, authoritative
+  add(new THREE.BoxGeometry(.6,.62,.55),skinM,     0,1.88,0);
+  // Hair (thinning on top, grey)
+  add(new THREE.BoxGeometry(.62,.14,.57),hairM,    0,2.1,0);
+  // Furrowed brow
+  add(new THREE.BoxGeometry(.58,.06,.58),new THREE.MeshLambertMaterial({color:0x1a1a2e}), 0,2.04,0.28);
+  // Glasses (stern)
+  add(new THREE.BoxGeometry(.2,.13,.1),glassesM, -0.14,1.86,0.29);
+  add(new THREE.BoxGeometry(.2,.13,.1),glassesM,  0.14,1.86,0.29);
+  add(new THREE.BoxGeometry(.1,.04,.08),glassesM,  0,  1.86,0.29);
+  // Stern mouth (straight line)
+  add(new THREE.BoxGeometry(.22,.05,.1),new THREE.MeshLambertMaterial({color:0x8B4513}), 0,1.72,0.3);
+
+  // Clipboard in right hand — raised up accusingly
+  const clipGroup=new THREE.Group();
+  clipGroup.position.set(0.52,1.35,0);
+  clipGroup.rotation.z=0.4; clipGroup.rotation.x=-0.3;
+  const clip=new THREE.Mesh(new THREE.BoxGeometry(.38,.52,.06),clipboardM);
+  clipGroup.add(clip);
+  const paper=new THREE.Mesh(new THREE.BoxGeometry(.3,.42,.07),paperM);
+  paper.position.z=0.04; clipGroup.add(paper);
+  // Lines on paper
+  for(let i=0;i<4;i++){
+    const line=new THREE.Mesh(new THREE.BoxGeometry(.22,.02,.08),new THREE.MeshLambertMaterial({color:0x888}));
+    line.position.y=-0.1+i*0.08; clipGroup.add(line);
+  }
+  // Clip at top
+  const clip2=new THREE.Mesh(new THREE.BoxGeometry(.2,.06,.1),new THREE.MeshLambertMaterial({color:0x888}));
+  clip2.position.y=0.25; clipGroup.add(clip2);
+  g.add(clipGroup);
+
+  // Arms
+  const armL=new THREE.Group(); armL.position.set(-0.52,1.35,0);
+  const ulL=new THREE.Mesh(new THREE.BoxGeometry(.24,.48,.24),suitM); ulL.position.y=-0.24; armL.add(ulL);
+  const hL=new THREE.Mesh(new THREE.BoxGeometry(.22,.22,.22),skinM); hL.position.y=-0.54; armL.add(hL);
+  g.add(armL);
+
+  // Legs
+  const legL=new THREE.Group(); legL.position.set(-0.2,0.78,0);
+  const ulLL=new THREE.Mesh(new THREE.BoxGeometry(.3,.56,.32),suitM); ulLL.position.y=-0.28; legL.add(ulLL);
+  const shL=new THREE.Mesh(new THREE.BoxGeometry(.32,.18,.42),new THREE.MeshLambertMaterial({color:0x1a1a2e})); shL.position.set(0,-0.6,0.06); legL.add(shL);
+  g.add(legL);
+
+  const legR=new THREE.Group(); legR.position.set(0.2,0.78,0);
+  const ulRR=new THREE.Mesh(new THREE.BoxGeometry(.3,.56,.32),suitM); ulRR.position.y=-0.28; legR.add(ulRR);
+  const shR=new THREE.Mesh(new THREE.BoxGeometry(.32,.18,.42),new THREE.MeshLambertMaterial({color:0x1a1a2e})); shR.position.set(0,-0.6,0.06); legR.add(shR);
+  g.add(legR);
+
+  g.rotation.y=Math.PI; // face forward
+  g.visible=false;
+  scene.add(g);
+  return {root:g, legL, legR, armL, clipGroup};
+}
+const INSPECTOR=buildInspector();
+
+
+
+// ════════════════════════════════════════════════════════
 // OBSTACLE / PROP BUILDERS
 // ════════════════════════════════════════════════════════
 
@@ -683,6 +829,39 @@ function randomPowerDef(){
 // ════════════════════════════════════════════════════════
 // SEASONAL STAGES  — one per school term + summer
 // ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
+// DIFFICULTY — must be declared before CHUNK_PATTERNS & spawnChunk
+// ════════════════════════════════════════════════════════
+let currentStage=0;
+let stageEntryDist=0;
+
+const DIFFICULTY=[
+  { baseSpeed:5.5,  maxSpeed:8.5,  rampRate:0.003, chunkSpacing:1.6, doubleObs:0.10, hitCDScale:1.4,  label:'Easy 🟢' },
+  { baseSpeed:8.5,  maxSpeed:12.0, rampRate:0.005, chunkSpacing:1.2, doubleObs:0.22, hitCDScale:1.1,  label:'Medium 🟡' },
+  { baseSpeed:12.0, maxSpeed:16.0, rampRate:0.007, chunkSpacing:0.9, doubleObs:0.38, hitCDScale:0.85, label:'Hard 🟠' },
+  { baseSpeed:16.0, maxSpeed:26.0, rampRate:0.012, chunkSpacing:0.65,doubleObs:0.55, hitCDScale:0.6,  label:'BRUTAL 🔴' },
+];
+
+// Pattern difficulty pools
+const PAT_EASY=[0,8,10,13];
+const PAT_MED =[1,2,4,5,7];
+const PAT_HARD=[3,6,9,11,12];
+const PAT_WEIGHTS=[
+  [0.70,0.25,0.05],  // Autumn  — mostly easy
+  [0.35,0.50,0.15],  // Winter  — mix
+  [0.10,0.45,0.45],  // Spring  — mostly hard
+  [0.00,0.20,0.80],  // Summer  — almost all hard
+];
+function pickPattern(){
+  const w=PAT_WEIGHTS[Math.min(currentStage,PAT_WEIGHTS.length-1)];
+  const r=Math.random();
+  let pool;
+  if(r<w[0])           pool=PAT_EASY;
+  else if(r<w[0]+w[1]) pool=PAT_MED;
+  else                  pool=PAT_HARD;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
 const CHUNK_PATTERNS=[
   // 0 — Open road, cones + power-up
   [{t:'cone',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:9},{t:'power',l:1,z:12},{t:'cone',l:2,z:14},{t:'star',l:0,z:15},{t:'bag',l:1,z:19},{t:'star',l:1,z:21}],
@@ -792,7 +971,7 @@ const LABEL_COLORS={'jump':'#2196F3','slide':'#E91E63','dodge':'#FF9800'};
 const LABEL_TEXT={'jump':'↑  JUMP','slide':'↓  SLIDE','dodge':'◄  DODGE  ►'};
 
 function spawnChunk(){
-  const patIdx=Math.floor(Math.random()*CHUNK_PATTERNS.length);
+  const patIdx=pickPattern();
   const pattern=CHUNK_PATTERNS[patIdx];
   const group=new THREE.Group();
   // Always spawn behind the furthest existing chunk
@@ -931,7 +1110,6 @@ const STAGES=[
   },
 ];
 
-let currentStage=0;
 let stageParticleTimer=0;
 
 function getStage(){ return STAGES[currentStage]; }
@@ -960,6 +1138,13 @@ let score=0,combo=1,comboFill=0; // score multiplier system
 let speed=8.0;
 let hitCD=0,invincible=false,invTimer=0,magnetOn=false,magnetTimer=0;
 let doubleScore=false,doubleScoreTimer=0;
+// Ofsted state
+let ofstedActive=false,ofstedTimer=0,ofstedCooldown=0;
+let ofstedX=0,ofstedZ=12; // inspector world position (behind player)
+let ofstedLegPhase=0;
+const OFSTED_DURATION=30; // seconds
+const OFSTED_COOLDOWN=45; // seconds between triggers
+const OFSTED_TRIGGER_DIST=200; // earliest possible trigger
 let slowMo=false,slowMoTimer=0;
 let starRain=false,starRainTimer=0,starRainSpawnCD=0;
 let comboLocked=false,comboLockedTimer=0; // x5 power locks combo at max
@@ -1377,6 +1562,10 @@ function resetGame(){
   dist=0;starCount=0;dodged=0;pwCount=0;lives=3;score=0;combo=1;comboFill=0;
   speed=8.0;hitCD=0;invincible=false;invTimer=0;magnetOn=false;magnetTimer=0;shakeMag=0;
   doubleScore=false;doubleScoreTimer=0;slowMo=false;slowMoTimer=0;
+  ofstedActive=false;ofstedTimer=0;ofstedCooldown=0;ofstedZ=12;ofstedX=0;
+  INSPECTOR.root.visible=false;
+  document.getElementById('ofsted-warning').classList.remove('show');
+  document.getElementById('ofsted-vignette').classList.remove('show');
   starRain=false;starRainTimer=0;starRainSpawnCD=0;comboLocked=false;comboLockedTimer=0;
   nextMilestone=0;particles2d=[];
   // Clear chunks
@@ -1492,7 +1681,11 @@ function loop(t){
 
 function update(dt){
   // Speed: starts 8, reaches 20 by 1500m
-  speed=Math.min(22, 8.0+dist*0.0085);
+  // Stage-based speed ramp
+  {const diff=DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)];
+   const tgt=Math.min(diff.maxSpeed,diff.baseSpeed+(dist-stageEntryDist)*diff.rampRate);
+   if(!slowMo) speed+=(tgt-speed)*0.02;
+   speed=Math.max(diff.baseSpeed*0.8,speed);}
   dist+=speed*dt;
 
   const dz=(slowMo?speed*0.45:speed)*dt;
@@ -1509,7 +1702,9 @@ function update(dt){
   activeChunks.forEach(c=>c.group.position.z+=dz);
   // Maintain a pipeline of chunks ahead; spawn when the furthest chunk is within sight
   const furthest=activeChunks.length>0?activeChunks[activeChunks.length-1]:null;
-  if(!furthest||(furthest.group.position.z+CHUNK_LEN)>CHUNK_SPAWN_Z+CHUNK_LEN){
+  const _diff=DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)];
+  const spawnThresh=CHUNK_SPAWN_Z+CHUNK_LEN*(_diff.chunkSpacing||1.0);
+  if(!furthest||(furthest.group.position.z+CHUNK_LEN)>spawnThresh){
     spawnChunk();
   }
   // Remove chunks that have scrolled completely past the camera
@@ -1550,6 +1745,38 @@ function update(dt){
 
   // ── Timers ──
   if(hitCD>0)hitCD-=dt;
+
+  // ── Ofsted Inspector ──
+  if(ofstedCooldown>0) ofstedCooldown-=dt;
+  if(!ofstedActive&&ofstedCooldown<=0&&dist>OFSTED_TRIGGER_DIST&&Math.random()<dt*0.008){
+    triggerOfsted();
+  }
+  if(ofstedActive){
+    ofstedTimer-=dt;
+    // Update timer display
+    const timerEl=document.getElementById('ofsted-timer');
+    if(timerEl) timerEl.textContent=Math.max(0,Math.ceil(ofstedTimer));
+    // Inspector chases player — moves toward player x and closes z gap
+    ofstedX+=(pX-ofstedX)*dt*1.8;
+    // Inspector z: starts at 12 (behind camera), tries to close to 7
+    const inspectorTargetZ=7.5+Math.sin(Date.now()/800)*0.3;
+    ofstedZ+=(inspectorTargetZ-ofstedZ)*dt*0.6;
+    // Animate inspector legs
+    ofstedLegPhase+=dt*speed*0.5;
+    INSPECTOR.root.position.set(ofstedX,0,ofstedZ);
+    INSPECTOR.legL.rotation.x=Math.sin(ofstedLegPhase)*.55;
+    INSPECTOR.legR.rotation.x=-Math.sin(ofstedLegPhase)*.55;
+    INSPECTOR.clipGroup.rotation.z=0.4+Math.sin(ofstedLegPhase*2)*0.15;
+    // If inspector catches player (z<5.5 AND x within 0.9)
+    if(ofstedZ<5.5&&Math.abs(ofstedX-pX)<0.9&&!invincible&&hitCD<=0){
+      hitCD=2.0;lives--;shakeMag=0.5;combo=1;comboFill=0;
+      sfxHit();updateHUD();
+      if(lives<=0){endOfsted(false);setTimeout(endGame,300);return;}
+      // Knock inspector back
+      ofstedZ=9;
+    }
+    if(ofstedTimer<=0) endOfsted(true);
+  }
   if(invincible){invTimer-=dt*1000;if(invTimer<=0){invincible=false;}}
   if(magnetOn){magnetTimer-=dt*1000;if(magnetTimer<=0)magnetOn=false;}
   if(doubleScore){doubleScoreTimer-=dt*1000;if(doubleScoreTimer<=0)doubleScore=false;}
@@ -1686,7 +1913,7 @@ function update(dt){
           const bottomGrace= isFloating ? 0.32 : 0.10;  // obs bottom must clear player bottom
           const vertOverlap=(pTop>prop.hB+bottomGrace)&&(pBot<prop.hT-topGrace);
           if(vertOverlap){
-            prop.hit=true;hitCD=1.6;lives--;shakeMag=0.4;
+            prop.hit=true;hitCD=1.6*DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)].hitCDScale;lives--;shakeMag=0.4;
             combo=1;comboFill=0; // reset combo on hit
             sfxHit();
             updateHUD();if(lives<=0)setTimeout(endGame,300);
@@ -1703,7 +1930,10 @@ function update(dt){
   try{
     if(currentStage<STAGES.length-1&&dist>=STAGES[currentStage+1].dist){
       currentStage++;
+      stageEntryDist=dist;
       updateStage();
+      if(currentStage>=3) document.body.classList.add('brutal-mode');
+      else document.body.classList.remove('brutal-mode');
       showMilestone(STAGES[currentStage].name);
       sfxMilestone();
     }
@@ -1816,6 +2046,7 @@ function animPlayer(dt){
 function updateHUD(){
   document.getElementById('h-dist').textContent=Math.floor(dist)+'m';
   document.getElementById('h-score').textContent=score.toLocaleString();
+  const _db=document.getElementById('diff-badge');if(_db){const _d=DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)];_db.textContent=_d.label;}
   for(let i=1;i<=3;i++)document.getElementById('hrt'+i).className='hrt'+(i>lives?' dead':'');
   document.getElementById('mult-label').textContent='×'+combo;
   document.getElementById('mult-fill').style.width=(comboFill*100)+'%';
@@ -1940,6 +2171,55 @@ function showScorePop(txt,meshPos,groupPos){
   });
 }
 
+
+// ════════════════════════════════════════════════════════
+// OFSTED INSPECTOR
+// ════════════════════════════════════════════════════════
+function triggerOfsted(){
+  ofstedActive=true;
+  ofstedTimer=OFSTED_DURATION;
+  ofstedCooldown=OFSTED_COOLDOWN;
+  ofstedX=pX; ofstedZ=18; // spawn behind
+  INSPECTOR.root.visible=true;
+  INSPECTOR.root.position.set(ofstedX,0,ofstedZ);
+  // Show warning banner
+  const w=document.getElementById('ofsted-warning');
+  w.classList.add('show');
+  setTimeout(()=>w.classList.remove('show'),3500);
+  // Red vignette
+  document.getElementById('ofsted-vignette').classList.add('show');
+  // Speed boost during inspection (panic!)
+  speed=Math.min(speed*1.35, DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)].maxSpeed*1.1);
+  // Sound — urgent alarm
+  if(AC){
+    [440,550,440,550,440].forEach((f,i)=>osc(f,'square',0.12,0.3,sfxGain,i*0.14));
+    setTimeout(()=>[330,415,330].forEach((f,i)=>osc(f,'square',0.1,0.25,sfxGain,i*0.12)),900);
+  }
+  showMilestone('📋 OFSTED INSPECTION!');
+}
+
+function endOfsted(survived){
+  ofstedActive=false;
+  INSPECTOR.root.visible=false;
+  document.getElementById('ofsted-vignette').classList.remove('show');
+  if(survived){
+    // Big bonus
+    const bonus=500+Math.floor(dist*0.5);
+    score+=bonus;
+    combo=Math.min(combo+2,8);
+    // Show bonus screen
+    const b=document.getElementById('ofsted-bonus');
+    document.getElementById('ofsted-bonus-pts').textContent='+'+bonus.toLocaleString();
+    b.className='show';
+    setTimeout(()=>{b.classList.add('hide');setTimeout(()=>b.className='',400);},2500);
+    // Triumphant sound
+    if(AC)[523,659,784,1047,1319].forEach((f,i)=>osc(f,'sine',0.2,0.35,sfxGain,i*0.08));
+    showMilestone('✅ OUTSTANDING! +'+bonus);
+    spawn2dParticles({x:pX,y:1.5,z:0},{},'#27ae60','#ffd84d');
+    updateHUD();
+  }
+}
+
 // ════════════════════════════════════════════════════════
 // END GAME
 // ════════════════════════════════════════════════════════
@@ -1953,6 +2233,9 @@ function endGame(){
   document.getElementById('pbadge').classList.remove('show');
   document.getElementById('snd-btn').classList.remove('show');
   document.getElementById('milestone').className='';
+  if(ofstedActive)endOfsted(false);
+  INSPECTOR.root.visible=false;
+  document.getElementById('ofsted-vignette').classList.remove('show');
   const distM=Math.floor(dist);
 
   // ── Score breakdown ──
