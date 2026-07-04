@@ -339,13 +339,13 @@ renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.outputEncoding=THREE.sRGBEncoding;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.15;
+renderer.toneMappingExposure=0.72;
 renderer.setClearColor(0x87CEEB);
 renderer.domElement.id='three-canvas';renderer.domElement.style.touchAction='none';
 document.getElementById('three-mount').appendChild(renderer.domElement);
 
 const scene=new THREE.Scene();
-scene.fog=new THREE.Fog(0xbfe6f5,42,98);
+scene.fog=new THREE.Fog(0x8ab8d4,35,80);
 
 const camera=new THREE.PerspectiveCamera(60,1,0.1,200);
 function onResize(){
@@ -356,11 +356,11 @@ function onResize(){
 window.addEventListener('resize',onResize);onResize();
 
 // Lights — layered for depth and warmth
-const hemi=new THREE.HemisphereLight(0xbfe6f5,0x6b8e4e,0.55);
+const hemi=new THREE.HemisphereLight(0xbfe6f5,0x4a7a3a,0.35);
 scene.add(hemi);
-const ambient=new THREE.AmbientLight(0xfff4e0,0.32);
+const ambient=new THREE.AmbientLight(0xfff4e0,0.18);
 scene.add(ambient);
-const sun=new THREE.DirectionalLight(0xfff1d0,1.4);
+const sun=new THREE.DirectionalLight(0xfff1d0,0.95);
 sun.position.set(18,32,10);
 sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);
@@ -371,10 +371,10 @@ sun.shadow.bias=-0.0015;
 sun.shadow.radius=2.5;
 scene.add(sun);
 // Cool fill from opposite side for natural shadow colour
-const fill=new THREE.DirectionalLight(0xaecdf5,0.35);
+const fill=new THREE.DirectionalLight(0xaecdf5,0.22);
 fill.position.set(-10,8,-6);scene.add(fill);
 // Subtle warm rim light from behind-camera for player pop
-const rim=new THREE.DirectionalLight(0xffe8c0,0.4);
+const rim=new THREE.DirectionalLight(0xffe8c0,0.22);
 rim.position.set(0,6,14);scene.add(rim);
 
 
@@ -416,7 +416,7 @@ function buildSkyDome(topColor, bottomColor){
   scene.add(sky);
   return sky;
 }
-let skyDome=buildSkyDome(0x3a8fd9,0xbfe6f5);
+let skyDome=buildSkyDome(0x2272c3,0x90c8e8);
 
 
 // Visible sun disc with glow
@@ -426,7 +426,7 @@ const sunDisc=new THREE.Mesh(sunDiscGeo,sunDiscMat);
 sunDisc.position.set(60,70,-90);
 scene.add(sunDisc);
 const sunGlowGeo=new THREE.SphereGeometry(9,16,16);
-const sunGlowMat=new THREE.MeshBasicMaterial({color:0xfff6d0,transparent:true,opacity:0.25,fog:false});
+const sunGlowMat=new THREE.MeshBasicMaterial({color:0xffe8a0,transparent:true,opacity:0.15,fog:false});
 const sunGlow=new THREE.Mesh(sunGlowGeo,sunGlowMat);
 sunGlow.position.copy(sunDisc.position);
 scene.add(sunGlow);
