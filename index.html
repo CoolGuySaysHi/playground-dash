@@ -333,16 +333,19 @@ function getLB(){
 // ════════════════════════════════════════════════════════
 // THREE.JS SETUP
 // ════════════════════════════════════════════════════════
-const renderer=new THREE.WebGLRenderer({antialias:true});
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.15;
 renderer.setClearColor(0x87CEEB);
 renderer.domElement.id='three-canvas';renderer.domElement.style.touchAction='none';
 document.getElementById('three-mount').appendChild(renderer.domElement);
 
 const scene=new THREE.Scene();
-scene.fog=new THREE.Fog(0x87CEEB,60,140);
+scene.fog=new THREE.Fog(0xbfe6f5,42,98);
 
 const camera=new THREE.PerspectiveCamera(60,1,0.1,200);
 function onResize(){
@@ -352,19 +355,81 @@ function onResize(){
 }
 window.addEventListener('resize',onResize);onResize();
 
-// Lights
-scene.add(new THREE.AmbientLight(0xffffff,0.75));
-const sun=new THREE.DirectionalLight(0xfff8e0,1.05);
-sun.position.set(12,30,6);
+// Lights — layered for depth and warmth
+const hemi=new THREE.HemisphereLight(0xbfe6f5,0x6b8e4e,0.55);
+scene.add(hemi);
+const ambient=new THREE.AmbientLight(0xfff4e0,0.32);
+scene.add(ambient);
+const sun=new THREE.DirectionalLight(0xfff1d0,1.4);
+sun.position.set(18,32,10);
 sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);
 sun.shadow.camera.near=1;sun.shadow.camera.far=160;
 sun.shadow.camera.left=-25;sun.shadow.camera.right=25;
 sun.shadow.camera.top=25;sun.shadow.camera.bottom=-25;
-sun.shadow.bias=-0.002;
+sun.shadow.bias=-0.0015;
+sun.shadow.radius=2.5;
 scene.add(sun);
-const fill=new THREE.DirectionalLight(0xc0d8ff,0.3);
-fill.position.set(-8,5,-3);scene.add(fill);
+// Cool fill from opposite side for natural shadow colour
+const fill=new THREE.DirectionalLight(0xaecdf5,0.35);
+fill.position.set(-10,8,-6);scene.add(fill);
+// Subtle warm rim light from behind-camera for player pop
+const rim=new THREE.DirectionalLight(0xffe8c0,0.4);
+rim.position.set(0,6,14);scene.add(rim);
+
+
+// ════════════════════════════════════════════════════════
+// SKY DOME — gradient sky via vertex colours (cheap, beautiful)
+// ════════════════════════════════════════════════════════
+function buildSkyDome(topColor, bottomColor){
+  const skyGeo=new THREE.SphereGeometry(180,24,16);
+  const uniforms={
+    topColor:{value:new THREE.Color(topColor)},
+    bottomColor:{value:new THREE.Color(bottomColor)},
+    offset:{value:20},
+    exponent:{value:0.65}
+  };
+  const skyMat=new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader:`
+      varying vec3 vWorldPosition;
+      void main(){
+        vec4 worldPosition=modelMatrix*vec4(position,1.0);
+        vWorldPosition=worldPosition.xyz;
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);
+      }`,
+    fragmentShader:`
+      uniform vec3 topColor;
+      uniform vec3 bottomColor;
+      uniform float offset;
+      uniform float exponent;
+      varying vec3 vWorldPosition;
+      void main(){
+        float h=normalize(vWorldPosition+vec3(0.0,offset,0.0)).y;
+        gl_FragColor=vec4(mix(bottomColor,topColor,max(pow(max(h,0.0),exponent),0.0)),1.0);
+      }`,
+    side:THREE.BackSide,
+    depthWrite:false
+  });
+  const sky=new THREE.Mesh(skyGeo,skyMat);
+  sky.renderOrder=-1000;
+  scene.add(sky);
+  return sky;
+}
+let skyDome=buildSkyDome(0x3a8fd9,0xbfe6f5);
+
+
+// Visible sun disc with glow
+const sunDiscGeo=new THREE.SphereGeometry(4,16,16);
+const sunDiscMat=new THREE.MeshBasicMaterial({color:0xfff6d0,fog:false});
+const sunDisc=new THREE.Mesh(sunDiscGeo,sunDiscMat);
+sunDisc.position.set(60,70,-90);
+scene.add(sunDisc);
+const sunGlowGeo=new THREE.SphereGeometry(9,16,16);
+const sunGlowMat=new THREE.MeshBasicMaterial({color:0xfff6d0,transparent:true,opacity:0.25,fog:false});
+const sunGlow=new THREE.Mesh(sunGlowGeo,sunGlowMat);
+sunGlow.position.copy(sunDisc.position);
+scene.add(sunGlow);
 
 // ════════════════════════════════════════════════════════
 // CONSTANTS
@@ -389,8 +454,8 @@ const JUMP_V=10.5;
 // ════════════════════════════════════════════════════════
 // MATERIALS
 // ════════════════════════════════════════════════════════
-const mat=(c,e=0)=>new THREE.MeshLambertMaterial({color:c,emissive:e});
-const matT=(c,o=0.5)=>new THREE.MeshLambertMaterial({color:c,transparent:true,opacity:o});
+const mat=(c,e=0,rough=0.7,metal=0.05)=>new THREE.MeshStandardMaterial({color:c,emissive:e,roughness:rough,metalness:metal});
+const matT=(c,o=0.5)=>new THREE.MeshStandardMaterial({color:c,transparent:true,opacity:o,roughness:0.4,metalness:0.1});
 const M={
   tA:mat(0x9a9080),tB:mat(0xb0a898),
   white:mat(0xffffff),grass:mat(0x58b858),
@@ -494,7 +559,7 @@ function mkBuilding(x,z){
   const w=3.5+Math.random()*3,h=5+Math.random()*6,d=3+Math.random()*2;
   const useET=Math.random()>0.55; // ~45% chance of ET branding
   const faceMat=useET
-    ?new THREE.MeshLambertMaterial({map:ET_TEX})
+    ?new THREE.MeshStandardMaterial({map:ET_TEX,roughness:0.65,metalness:0.04})
     :mat(0xe8ddc8);
   // Build 6-sided box with ET texture on front face
   const mats=useET
@@ -517,7 +582,7 @@ function mkBuilding(x,z){
   g.position.set(x,0,z);scene.add(g);return g;
 }
 const scenery=[];
-for(let z=-70;z>-220;z-=13){scenery.push(mkTree(-(TRACK_W/2+2.5+Math.random()*4),z));scenery.push(mkTree(TRACK_W/2+2.5+Math.random()*4,z));}
+for(let z=-70;z>-220;z-=24){scenery.push(mkTree(-(TRACK_W/2+3+Math.random()*4),z));scenery.push(mkTree(TRACK_W/2+3+Math.random()*4,z));}
 for(let z=-90;z>-220;z-=32){if(Math.random()>.3)scenery.push(mkBuilding(-(TRACK_W/2+11+Math.random()*6),z));if(Math.random()>.3)scenery.push(mkBuilding(TRACK_W/2+11+Math.random()*6,z));}
 
 // ════════════════════════════════════════════════════════
@@ -551,14 +616,14 @@ function buildInspector(){
   const add=(geo,m,x,y,z)=>{const mesh=new THREE.Mesh(geo,m);mesh.position.set(x,y,z);mesh.castShadow=true;g.add(mesh);return mesh;};
 
   // Suit (dark grey)
-  const suitM=new THREE.MeshLambertMaterial({color:0x2c3e50});
-  const shirtM=new THREE.MeshLambertMaterial({color:0xecf0f1});
-  const skinM=new THREE.MeshLambertMaterial({color:0xFFCCBC});
-  const hairM=new THREE.MeshLambertMaterial({color:0x1a1a2e});
-  const tieM=new THREE.MeshLambertMaterial({color:0xc0392b});
-  const clipboardM=new THREE.MeshLambertMaterial({color:0xd4a843});
-  const paperM=new THREE.MeshLambertMaterial({color:0xffffff});
-  const glassesM=new THREE.MeshLambertMaterial({color:0x222222});
+  const suitM=new THREE.MeshStandardMaterial({color:0x2c3e50,roughness:0.65,metalness:0.04});
+  const shirtM=new THREE.MeshStandardMaterial({color:0xecf0f1,roughness:0.65,metalness:0.04});
+  const skinM=new THREE.MeshStandardMaterial({color:0xFFCCBC,roughness:0.65,metalness:0.04});
+  const hairM=new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.65,metalness:0.04});
+  const tieM=new THREE.MeshStandardMaterial({color:0xc0392b,roughness:0.65,metalness:0.04});
+  const clipboardM=new THREE.MeshStandardMaterial({color:0xd4a843,roughness:0.65,metalness:0.04});
+  const paperM=new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.65,metalness:0.04});
+  const glassesM=new THREE.MeshStandardMaterial({color:0x222222,roughness:0.65,metalness:0.04});
 
   // Body — wider/stockier than player (imposing)
   add(new THREE.BoxGeometry(.85,.95,.48),suitM,    0,1.18,0);
@@ -576,13 +641,13 @@ function buildInspector(){
   // Hair (thinning on top, grey)
   add(new THREE.BoxGeometry(.62,.14,.57),hairM,    0,2.1,0);
   // Furrowed brow
-  add(new THREE.BoxGeometry(.58,.06,.58),new THREE.MeshLambertMaterial({color:0x1a1a2e}), 0,2.04,0.28);
+  add(new THREE.BoxGeometry(.58,.06,.58),new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.65,metalness:0.04}), 0,2.04,0.28);
   // Glasses (stern)
   add(new THREE.BoxGeometry(.2,.13,.1),glassesM, -0.14,1.86,0.29);
   add(new THREE.BoxGeometry(.2,.13,.1),glassesM,  0.14,1.86,0.29);
   add(new THREE.BoxGeometry(.1,.04,.08),glassesM,  0,  1.86,0.29);
   // Stern mouth (straight line)
-  add(new THREE.BoxGeometry(.22,.05,.1),new THREE.MeshLambertMaterial({color:0x8B4513}), 0,1.72,0.3);
+  add(new THREE.BoxGeometry(.22,.05,.1),new THREE.MeshStandardMaterial({color:0x8B4513,roughness:0.65,metalness:0.04}), 0,1.72,0.3);
 
   // Clipboard in right hand — raised up accusingly
   const clipGroup=new THREE.Group();
@@ -594,11 +659,11 @@ function buildInspector(){
   paper.position.z=0.04; clipGroup.add(paper);
   // Lines on paper
   for(let i=0;i<4;i++){
-    const line=new THREE.Mesh(new THREE.BoxGeometry(.22,.02,.08),new THREE.MeshLambertMaterial({color:0x888}));
+    const line=new THREE.Mesh(new THREE.BoxGeometry(.22,.02,.08),new THREE.MeshStandardMaterial({color:0x888,roughness:0.65,metalness:0.04}));
     line.position.y=-0.1+i*0.08; clipGroup.add(line);
   }
   // Clip at top
-  const clip2=new THREE.Mesh(new THREE.BoxGeometry(.2,.06,.1),new THREE.MeshLambertMaterial({color:0x888}));
+  const clip2=new THREE.Mesh(new THREE.BoxGeometry(.2,.06,.1),new THREE.MeshStandardMaterial({color:0x888,roughness:0.65,metalness:0.04}));
   clip2.position.y=0.25; clipGroup.add(clip2);
   g.add(clipGroup);
 
@@ -611,12 +676,12 @@ function buildInspector(){
   // Legs
   const legL=new THREE.Group(); legL.position.set(-0.2,0.78,0);
   const ulLL=new THREE.Mesh(new THREE.BoxGeometry(.3,.56,.32),suitM); ulLL.position.y=-0.28; legL.add(ulLL);
-  const shL=new THREE.Mesh(new THREE.BoxGeometry(.32,.18,.42),new THREE.MeshLambertMaterial({color:0x1a1a2e})); shL.position.set(0,-0.6,0.06); legL.add(shL);
+  const shL=new THREE.Mesh(new THREE.BoxGeometry(.32,.18,.42),new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.65,metalness:0.04})); shL.position.set(0,-0.6,0.06); legL.add(shL);
   g.add(legL);
 
   const legR=new THREE.Group(); legR.position.set(0.2,0.78,0);
   const ulRR=new THREE.Mesh(new THREE.BoxGeometry(.3,.56,.32),suitM); ulRR.position.y=-0.28; legR.add(ulRR);
-  const shR=new THREE.Mesh(new THREE.BoxGeometry(.32,.18,.42),new THREE.MeshLambertMaterial({color:0x1a1a2e})); shR.position.set(0,-0.6,0.06); legR.add(shR);
+  const shR=new THREE.Mesh(new THREE.BoxGeometry(.32,.18,.42),new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.65,metalness:0.04})); shR.position.set(0,-0.6,0.06); legR.add(shR);
   g.add(legR);
 
   g.rotation.y=Math.PI; // face forward
@@ -724,7 +789,7 @@ function mkBall(){
 function mkStar(){
   const g=new THREE.Group();
   const s=new THREE.Mesh(new THREE.OctahedronGeometry(.28,0),M.starM);s.castShadow=true;g.add(s);
-  const gl=new THREE.Mesh(new THREE.OctahedronGeometry(.38,0),matT(0xFFD700,0.22));g.add(gl);
+  const gl=new THREE.Mesh(new THREE.OctahedronGeometry(.38,0),matT(0xFFD700,0.1));g.add(gl);
   return g;
 }
 function mkPower(def){
@@ -735,7 +800,7 @@ function mkPower(def){
     star_rain:0xFFD700, x5score:0xff4040
   };
   const c=cols[def.id]||0xffffff;
-  const m=new THREE.MeshLambertMaterial({color:c,emissive:c,emissiveIntensity:0.3});
+  const m=new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:0.3,roughness:0.65,metalness:0.04});
 
   if(def.id==='whistle'){
     // Whistle shape
@@ -749,13 +814,13 @@ function mkPower(def){
     cup.position.y=0;g.add(cup);
     const rim=new THREE.Mesh(new THREE.TorusGeometry(.18,.03,6,12),m);
     rim.position.y=.19;g.add(rim);
-    const steam=new THREE.Mesh(new THREE.SphereGeometry(.08,6,4),new THREE.MeshLambertMaterial({color:0xffffff,transparent:true,opacity:.5}));
+    const steam=new THREE.Mesh(new THREE.SphereGeometry(.08,6,4),new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.5,roughness:0.65,metalness:0.04}));
     steam.position.y=.38;g.add(steam);
   } else if(def.id==='magnet'){
     // U-shaped magnet
     const bar=new THREE.Mesh(new THREE.TorusGeometry(.22,.08,8,8,Math.PI),m);
     bar.rotation.z=Math.PI;g.add(bar);
-    [-1,1].forEach(s=>{const tip=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.16,6),s<0?new THREE.MeshLambertMaterial({color:0xff4040}):new THREE.MeshLambertMaterial({color:0x4040ff}));tip.position.set(s*.22,-.08,0);g.add(tip);});
+    [-1,1].forEach(s=>{const tip=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.16,6),s<0?new THREE.MeshStandardMaterial({color:0xff4040,roughness:0.65,metalness:0.04}):new THREE.MeshStandardMaterial({color:0x4040ff,roughness:0.65,metalness:0.04}));tip.position.set(s*.22,-.08,0);g.add(tip);});
   } else if(def.id==='x2'){
     // Big ×2 text on a diamond
     const dia=new THREE.Mesh(new THREE.OctahedronGeometry(.32),m);g.add(dia);
@@ -763,17 +828,17 @@ function mkPower(def){
   } else if(def.id==='shield'){
     // Shield shape
     const sh=new THREE.Mesh(new THREE.CylinderGeometry(.28,.2,.08,6),m);g.add(sh);
-    const cross1=new THREE.Mesh(new THREE.BoxGeometry(.08,.36,.08),new THREE.MeshLambertMaterial({color:0xffffff}));g.add(cross1);
-    const cross2=new THREE.Mesh(new THREE.BoxGeometry(.36,.08,.08),new THREE.MeshLambertMaterial({color:0xffffff}));g.add(cross2);
+    const cross1=new THREE.Mesh(new THREE.BoxGeometry(.08,.36,.08),new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.65,metalness:0.04}));g.add(cross1);
+    const cross2=new THREE.Mesh(new THREE.BoxGeometry(.36,.08,.08),new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.65,metalness:0.04}));g.add(cross2);
   } else if(def.id==='slowmo'){
     // Hourglass
     const top=new THREE.Mesh(new THREE.ConeGeometry(.22,.28,8,1,false),m);top.position.y=.14;g.add(top);
     const bot=new THREE.Mesh(new THREE.ConeGeometry(.22,.28,8,1,false),m);bot.position.y=-.14;bot.rotation.x=Math.PI;g.add(bot);
-    const mid=new THREE.Mesh(new THREE.SphereGeometry(.06,6,4),new THREE.MeshLambertMaterial({color:0xffffff}));g.add(mid);
+    const mid=new THREE.Mesh(new THREE.SphereGeometry(.06,6,4),new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.65,metalness:0.04}));g.add(mid);
   } else if(def.id==='star_rain'){
     // Cluster of 3 stars
     [-1,0,1].forEach(s=>{
-      const st=new THREE.Mesh(new THREE.OctahedronGeometry(.14),new THREE.MeshLambertMaterial({color:0xFFD700,emissive:0x886600}));
+      const st=new THREE.Mesh(new THREE.OctahedronGeometry(.14),new THREE.MeshStandardMaterial({color:0xFFD700,emissive:0x886600,roughness:0.65,metalness:0.04}));
       st.position.set(s*.22,Math.abs(s)*.15,0);g.add(st);
     });
   } else if(def.id==='x5score'){
@@ -785,7 +850,7 @@ function mkPower(def){
   }
 
   // Outer glow ring on all power-ups
-  const glowM=new THREE.MeshLambertMaterial({color:c,transparent:true,opacity:.25});
+  const glowM=new THREE.MeshStandardMaterial({color:c,transparent:true,opacity:.1,roughness:0.65,metalness:0.04});
   const glow=new THREE.Mesh(new THREE.SphereGeometry(.48,8,6),glowM);g.add(glow);
   g.castShadow=true;
   return g;
@@ -929,7 +994,7 @@ function mkRamp(lane){
   // Side walls
   [-1,1].forEach(s=>{const wall=new THREE.Mesh(new THREE.BoxGeometry(0.18,1.5,3.8),M.rampD);wall.position.set(s*rw*.5,.68,-0.5);wall.castShadow=true;g.add(wall);});
   // Stripes
-  [-.9,0,.9].forEach(zo=>{const stripe=new THREE.Mesh(new THREE.BoxGeometry(rw,.01,.18),new THREE.MeshLambertMaterial({color:0xffffff,transparent:true,opacity:.45}));stripe.position.set(0,.98+zo*.28,zo-.2);g.add(stripe);});
+  [-.9,0,.9].forEach(zo=>{const stripe=new THREE.Mesh(new THREE.BoxGeometry(rw,.01,.18),new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.45,roughness:0.65,metalness:0.04}));stripe.position.set(0,.98+zo*.28,zo-.2);g.add(stripe);});
   g.userData.isRamp=true;
   g.userData.rampTopY=1.4;
   return g;
@@ -999,7 +1064,7 @@ function makeLabelSprite(obsId, dodgeType){
   const tex=new THREE.CanvasTexture(canvas);
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
   const sprite=new THREE.Sprite(mat);
-  sprite.scale.set(2.8,0.74,1);
+  sprite.scale.set(1.9,0.5,1);
   return sprite;
 }
 
@@ -1070,8 +1135,8 @@ function spawnChunk(){
     const mesh=build();
     mesh.position.set(laneX,0,specZ);
     // Scale up tall characters so they're visible from distance
-    if(['parent','fight','snow','kid'].includes(spec.t)) mesh.scale.set(1.15,1.15,1.15);
-    if(['cone'].includes(spec.t)) mesh.scale.set(1.3,1.3,1.3);
+    if(['parent','fight','snow','kid'].includes(spec.t)) mesh.scale.set(1.0,1.0,1.0);
+    if(['cone'].includes(spec.t)) mesh.scale.set(1.05,1.05,1.05);
     group.add(mesh);
     // Add floating label sprite above obstacle
     const hd=hitDefs[spec.t];
@@ -1081,11 +1146,11 @@ function spawnChunk(){
     labelSpr.position.set(0, hd.hT+0.9, 0);
     mesh.add(labelSpr);
     // Coloured ground ring to visually signal required action
-    const ringMat=new THREE.MeshLambertMaterial({
+    const ringMat=new THREE.MeshStandardMaterial({
       color:dodgeType==='jump'?0x2196F3:dodgeType==='slide'?0xE91E63:0xFF9800,
-      transparent:true,opacity:0.75,emissive:dodgeType==='jump'?0x0a3060:dodgeType==='slide'?0x400010:0x402000
-    });
-    const ring=new THREE.Mesh(new THREE.RingGeometry(0.6,1.3,24),ringMat);
+      transparent:true,opacity:0.30,emissive:dodgeType==='jump'?0x0a3060:dodgeType==='slide'?0x400010:0x402000
+    ,roughness:0.65,metalness:0.04});
+    const ring=new THREE.Mesh(new THREE.RingGeometry(0.45,0.85,14),ringMat);
     ring.rotation.x=-Math.PI/2;ring.position.y=0.03;
     mesh.add(ring);
     chunk.props.push({mesh,spec,isObs:true,hit:false,...hitDefs[spec.t]});
@@ -1103,7 +1168,7 @@ const STAGES=[
   {
     name:'Autumn Term 🍂',
     dist:0,
-    sky:0xE8A87C,       skyFog:0xD4956A,
+    sky:0xE8A87C, skyTop:0xc77a4a, skyFog:0xD4956A,
     grass:0x8B7355,     track:0xA09070,
     ambientCol:0xFFE0C0, sunCol:0xFFD080,
     particleCol:'#D2691E', particleCol2:'#FF6B35',
@@ -1114,7 +1179,7 @@ const STAGES=[
   {
     name:'Winter Term ❄️',
     dist:300,
-    sky:0xB8D4E8,       skyFog:0xC8DCF0,
+    sky:0xB8D4E8, skyTop:0x6fa8d8, skyFog:0xC8DCF0,
     grass:0xD8E8F0,     track:0xC0D0DC,
     ambientCol:0xD0E8FF, sunCol:0xFFFFE0,
     particleCol:'#FFFFFF', particleCol2:'#B0D8FF',
@@ -1125,7 +1190,7 @@ const STAGES=[
   {
     name:'Spring Term 🌸',
     dist:600,
-    sky:0x87CEEB,       skyFog:0xA8DFF0,
+    sky:0x87CEEB, skyTop:0x3a8fd9, skyFog:0xA8DFF0,
     grass:0x7EC850,     track:0xB0C898,
     ambientCol:0xFFFFE8, sunCol:0xFFFF80,
     particleCol:'#FFB7C5', particleCol2:'#98FB98',
@@ -1136,7 +1201,7 @@ const STAGES=[
   {
     name:'Summer Holiday 🌞',
     dist:1200,
-    sky:0x4FC3F7,       skyFog:0x81D4FA,
+    sky:0x4FC3F7, skyTop:0x1d7fc9, skyFog:0x81D4FA,
     grass:0x5CB85C,     track:0xD4C8A0,
     ambientCol:0xFFF8E1, sunCol:0xFFEB3B,
     particleCol:'#FFD700', particleCol2:'#FFA500',
@@ -1162,6 +1227,10 @@ function updateStage(){
     if(grassR&&grassR.material) grassR.material.color.setHex(stg.grass);
     if(gnd&&gnd.material) gnd.material.color.setHex(stg.track);
     trackTiles.forEach((t,i)=>{if(t&&t.material)t.material.color.setHex(i%2===0?stg.track:stg.trackAccent||stg.track);});
+    if(skyDome&&skyDome.material&&skyDome.material.uniforms){
+      skyDome.material.uniforms.topColor.value.setHex(stg.skyTop!==undefined?stg.skyTop:stg.sky);
+      skyDome.material.uniforms.bottomColor.value.setHex(stg.fogColor);
+    }
   }catch(e){console.warn('updateStage error:',e);}
 }
 
@@ -1688,7 +1757,7 @@ function flashSwipeHint(arrow){
   el.textContent=arrow;
   el.style.opacity='1';el.style.transform='scale(1.2)';
   clearTimeout(swipeHintTO);
-  swipeHintTO=setTimeout(()=>{el.style.opacity='0';el.style.transform='scale(0.8)';},280);
+  swipeHintTO=setTimeout(()=>{el.style.opacity='0';el.style.transform='scale(0.8)';},140);
 }
 
 function doLane(d){
@@ -1860,7 +1929,7 @@ function update(dt){
       if(prop.isObs && prop.mesh.children.length>0){
         const lbl=prop.mesh.children[prop.mesh.children.length-1];
         if(lbl.isSprite){
-          const fade=worldZ>1.5&&worldZ<22?THREE.MathUtils.clamp((worldZ-1.5)/5,0,1):0;
+          const fade=worldZ>1.5&&worldZ<11?THREE.MathUtils.clamp((worldZ-1.5)/3,0,1):0;
           lbl.material.opacity=fade;
           // Always face camera (sprites do this automatically)
         }
@@ -1978,7 +2047,7 @@ function update(dt){
   // ── Stage ambient particles (leaves/snow/petals) ──
   stageParticleTimer-=dt;
   if(stageParticleTimer<=0&&pCtx){
-    stageParticleTimer=0.12+Math.random()*0.08;
+    stageParticleTimer=0.55+Math.random()*0.3;
     const stg=getStage();
     // Spawn floating particle from random position
     const sx=Math.random()*window.innerWidth;
@@ -1986,7 +2055,7 @@ function update(dt){
       x:sx, y:-10,
       vx:(Math.random()-0.5)*1.5,
       vy:0.8+Math.random()*1.2,
-      life:1, r:3+Math.random()*4,
+      life:1, r:1.5+Math.random()*2,
       col:Math.random()<0.5?stg.particleCol:stg.particleCol2,
       rot:Math.random()*Math.PI*2, rotV:(Math.random()-0.5)*0.1,
       isSeasonal:true
@@ -2121,7 +2190,7 @@ function worldToScreen(worldPos,groupPos){
 function spawn2dParticles(meshPos,groupPos,col1,col2){
   if(!pCtx)return;
   const sc=worldToScreen(meshPos,groupPos);
-  for(let i=0;i<18;i++){
+  for(let i=0;i<8;i++){
     const a=Math.random()*Math.PI*2,s=1.5+Math.random()*4;
     particles2d.push({
       x:sc.x,y:sc.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-3,
