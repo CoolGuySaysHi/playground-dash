@@ -24,18 +24,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#87CEEB;touch-action
 .brand{display:flex;align-items:center;margin-bottom:14px;min-height:40px;}
 .badge{display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;border:none;padding:0;}.badge img{height:38px;width:auto;max-width:190px;min-width:0;object-fit:contain;object-position:left center;display:block;}
 .brt{font-size:9.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F47920;line-height:1.3;}
-.brs{font-size:8.5px;color:#334;}
+.brs{font-size:8.5px;color:#fff;}
 .gtitle{font-family:'Fredoka One',cursive;line-height:.9;margin-bottom:5px;}
 .l1{font-size:44px;color:#fff;display:block;line-height:1;letter-spacing:-1px;}
 .l2{font-size:44px;background:linear-gradient(90deg,#F47920,#ff6bab,#4fb3f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;line-height:1.05;letter-spacing:-1px;}
-.tag{font-size:12px;color:#445;margin-bottom:15px;line-height:1.5;}
+.tag{font-size:12px;color:#fff;margin-bottom:15px;line-height:1.5;}
 .saved{background:rgba(244,121,32,.08);border:1.5px solid rgba(244,121,32,.2);border-radius:12px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
 .sa{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F47920,#c84a00);color:#fff;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.snm{font-size:13px;font-weight:800;color:#eef;}.ssc{font-size:11px;color:#445;margin-top:1px;}
-.chg{font-size:10px;color:#334;cursor:pointer;text-decoration:underline;margin-left:auto;flex-shrink:0;align-self:flex-start;}
-.fl{font-size:9.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#334;margin-bottom:3px;margin-top:1px;}
+.snm{font-size:13px;font-weight:800;color:#eef;}.ssc{font-size:11px;color:#fff;margin-top:1px;}
+.chg{font-size:10px;color:#fff;cursor:pointer;text-decoration:underline;margin-left:auto;flex-shrink:0;align-self:flex-start;}
+.fl{font-size:9.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#fff;margin-bottom:3px;margin-top:1px;}
 input[type=text],input[type=email]{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 14px;color:#fff;font-size:16px;font-family:'Nunito',sans-serif;margin-bottom:9px;outline:none;transition:border-color .2s;touch-action:auto;-webkit-user-select:text;user-select:text;pointer-events:all;cursor:text;-webkit-appearance:none;appearance:none;}
-input:focus{border-color:#F47920;}input::placeholder{color:#223;}
+input:focus{border-color:#F47920;}input::placeholder{color:rgba(255,255,255,.4);}
 .er{font-size:11px;color:#e84040;min-height:14px;margin-bottom:5px;font-weight:700;}
 .btn{width:100%;padding:12px;border-radius:11px;border:none;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:transform .12s;display:block;text-align:center;}
 .btn:active{transform:scale(.97);}
@@ -44,13 +44,13 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 .bg{background:rgba(255,255,255,.04);color:#889;border:1.5px solid rgba(255,255,255,.08);margin-top:7px;}
 .hw{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
 .hn{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#F47920,#c84a00);color:#fff;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.ht{font-size:13px;color:#667;line-height:1.5;padding-top:3px;}.ht b{color:#bbc;}
+.ht{font-size:13px;color:#fff;line-height:1.5;padding-top:3px;}.ht b{color:#bbc;}
 #hud{position:fixed;top:0;left:0;right:0;padding:8px 12px 0;display:none;z-index:20;pointer-events:none;}
 #hud.show{display:block;}
 #hud-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
 .hb{background:rgba(6,2,18,.88);border:1.5px solid rgba(255,255,255,.12);border-radius:12px;padding:5px 13px;text-align:center;backdrop-filter:blur(12px);box-shadow:0 4px 16px rgba(0,0,0,.4);}
 .hv{font-family:'Fredoka One',cursive;font-size:22px;color:#F47920;line-height:1.1;}
-.hl{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#445;font-weight:700;}
+.hl{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#fff;font-weight:700;}
 .hlv{display:flex;gap:4px;justify-content:center;margin-top:3px;}
 .hrt{font-size:16px;line-height:1;transition:all .3s;filter:drop-shadow(0 0 4px #ff4466);}.hrt.dead{opacity:.1;filter:none;transform:scale(.6);}
 /* Multiplier bar */
@@ -82,23 +82,23 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 /* Sound toggle */
 #snd-btn{position:fixed;bottom:14px;right:14px;z-index:25;background:rgba(6,2,18,.85);border:1.5px solid rgba(255,255,255,.12);border-radius:50%;width:40px;height:40px;display:none;align-items:center;justify-content:center;cursor:pointer;font-size:18px;pointer-events:all;backdrop-filter:blur(8px);}
 #snd-btn.show{display:flex;}
-#hint{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);background:rgba(6,2,18,.82);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:5px 14px;font-size:11px;color:#445;font-weight:700;pointer-events:none;z-index:20;display:none;white-space:nowrap;}
+#hint{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);background:rgba(6,2,18,.82);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:5px 14px;font-size:11px;color:#fff;font-weight:700;pointer-events:none;z-index:20;display:none;white-space:nowrap;}
 #hint.show{display:block;}
 #pbadge{position:fixed;top:74px;left:50%;transform:translateX(-50%);color:#fff;border-radius:18px;padding:5px 16px;font-size:14px;font-weight:800;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4);}
 #pbadge.show{opacity:1;}
 #score-pop{position:fixed;font-family:'Fredoka One',cursive;font-size:28px;pointer-events:none;z-index:40;opacity:0;color:#ffd84d;text-shadow:0 2px 8px rgba(0,0,0,.6);transition:none;}
 .gos{font-family:'Fredoka One',cursive;font-size:76px;line-height:1;background:linear-gradient(135deg,#F47920,#ff6bab);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.gosub{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#334;margin-bottom:2px;}
-.gomsg{font-size:13px;color:#667;margin-bottom:14px;}
+.gosub{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:2px;}
+.gomsg{font-size:13px;color:#fff;margin-bottom:14px;}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
 .st{background:rgba(255,255,255,.04);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.05);}
 .sv{font-family:'Fredoka One',cursive;font-size:23px;color:#fff;}
-.sl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#334;font-weight:700;}
-.ss2{font-size:11px;color:#334;margin-bottom:10px;min-height:14px;}
-.score-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#778;margin-bottom:6px;font-weight:600;}
+.sl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#fff;font-weight:700;}
+.ss2{font-size:11px;color:#fff;margin-bottom:10px;min-height:14px;}
+.score-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#fff;margin-bottom:6px;font-weight:600;}
 .score-row span:last-child{color:#dde;font-weight:700;font-size:13px;}
 .lbt{display:flex;gap:5px;margin-bottom:10px;}
-.lbtab{flex:1;padding:6px;border-radius:9px;border:1.5px solid rgba(255,255,255,.07);background:transparent;color:#445;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;}
+.lbtab{flex:1;padding:6px;border-radius:9px;border:1.5px solid rgba(255,255,255,.07);background:transparent;color:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;}
 .lbtab.on{background:linear-gradient(135deg,#F47920,#c84a00);border-color:transparent;color:#fff;}
 .lbl{max-height:260px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#112 transparent;}
 .lbr{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;margin-bottom:4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.04);}
@@ -106,32 +106,33 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 .lbr.si{background:rgba(150,180,220,.05);border-color:rgba(150,180,220,.12);}
 .lbr.br{background:rgba(195,105,55,.06);border-color:rgba(195,105,55,.15);}
 .lbr.yu{border-color:rgba(244,121,32,.4);background:rgba(244,121,32,.08);}
-.lbm{font-size:15px;width:19px;text-align:center;}.lbrk{font-size:12px;font-weight:900;color:#223;width:17px;text-align:center;}
-.lbi{flex:1;}.lbn{font-size:12px;font-weight:800;color:#ccd;}.lbsb{font-size:10px;color:#334;margin-top:1px;}
+.lbm{font-size:15px;width:19px;text-align:center;}.lbrk{font-size:12px;font-weight:900;color:#fff;width:17px;text-align:center;}
+.lbi{flex:1;}.lbn{font-size:12px;font-weight:800;color:#ccd;}.lbsb{font-size:10px;color:#fff;margin-top:1px;}
 .lbsc{font-family:'Fredoka One',cursive;font-size:16px;color:#F47920;}
 .ytag{font-size:8px;font-weight:800;color:#F47920;text-transform:uppercase;border:1px solid rgba(244,121,32,.4);border-radius:3px;padding:1px 4px;margin-left:4px;vertical-align:middle;}
-.lbe{text-align:center;color:#223;padding:1.5rem 0;font-size:12px;}
-.snn{background:rgba(244,121,32,.05);border:1px solid rgba(244,121,32,.12);border-radius:9px;padding:10px;margin-top:9px;font-size:10.5px;color:#334;line-height:1.8;}
+.lbe{text-align:center;color:#fff;padding:1.5rem 0;font-size:12px;}
+.snn{background:rgba(244,121,32,.05);border:1px solid rgba(244,121,32,.12);border-radius:9px;padding:10px;margin-top:9px;font-size:10.5px;color:#fff;line-height:1.8;}
 .snn b{color:#F47920;}.snn code{background:rgba(255,255,255,.05);padding:1px 4px;border-radius:3px;font-family:monospace;font-size:9.5px;}
 #loading{position:fixed;inset:0;background:#060210;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity .5s;}
 .ltitle{font-family:'Fredoka One',cursive;font-size:34px;color:#F47920;margin-bottom:6px;}
-.lsub{font-size:12px;color:#445;margin-bottom:22px;}
+.lsub{font-size:12px;color:#fff;margin-bottom:22px;}
 .lbar{width:180px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;}
 .lfill{height:100%;background:linear-gradient(90deg,#F47920,#ff6bab);border-radius:2px;transition:width .25s;}
 .brutal-mode #hud{border-bottom:2px solid rgba(255,50,50,.45);}
 
 /* ── OFSTED MODE ── */
 #ofsted-warning{
-  position:fixed;top:-100px;left:0;right:0;
+  position:fixed;top:0;left:0;right:0;
+  transform:translateY(-100%);
   background:linear-gradient(135deg,#c0392b,#922b21);
   color:#fff;text-align:center;
   padding:12px 20px 14px;z-index:60;
   pointer-events:none;
-  transition:top .35s cubic-bezier(.34,1.2,.64,1);
+  transition:transform .35s cubic-bezier(.34,1.2,.64,1);
   border-bottom:3px solid #ff6b6b;
   box-shadow:0 8px 40px rgba(192,57,43,.7);
 }
-#ofsted-warning.show{top:0;}
+#ofsted-warning.show{transform:translateY(0);}
 #ofsted-title{font-family:'Fredoka One',cursive;font-size:22px;letter-spacing:1px;}
 #ofsted-sub{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-top:2px;}
 #ofsted-timer{font-family:'Fredoka One',cursive;font-size:28px;color:#ffd84d;margin-top:2px;text-shadow:0 0 10px rgba(255,216,77,.6);}
@@ -166,6 +167,38 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 #ofsted-bonus-title{font-family:'Fredoka One',cursive;font-size:22px;color:#fff;}
 #ofsted-bonus-pts{font-family:'Fredoka One',cursive;font-size:36px;color:#ffd84d;}
 #ofsted-bonus-sub{font-size:12px;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:2px;margin-top:4px;}
+
+/* ── SPECIAL SCHOOL EVENTS (Safeguarding / SATs / Angry Parent / Lockdown / Cyberattack) ── */
+#event-warning{
+  position:fixed;top:0;left:0;right:0;
+  transform:translateY(-100%);
+  background:linear-gradient(135deg,var(--ev-c1,#8e44ad),var(--ev-c2,#5b2c6f));
+  color:#fff;text-align:center;
+  padding:12px 20px 14px;z-index:60;
+  pointer-events:none;
+  transition:transform .35s cubic-bezier(.34,1.2,.64,1);
+  border-bottom:3px solid rgba(255,255,255,.4);
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+}
+#event-warning.show{transform:translateY(0);}
+#event-icon{font-size:26px;margin-bottom:2px;}
+#event-title{font-family:'Fredoka One',cursive;font-size:20px;letter-spacing:1px;}
+#event-sub{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.9;margin-top:2px;}
+#event-timer{font-family:'Fredoka One',cursive;font-size:24px;color:#ffd84d;margin-top:2px;text-shadow:0 0 10px rgba(255,216,77,.6);}
+
+#event-vignette{
+  position:fixed;inset:0;pointer-events:none;z-index:14;
+  box-shadow:inset 0 0 80px rgba(0,0,0,0);
+  transition:box-shadow .5s,background .5s,filter .5s;
+}
+#event-vignette.show{box-shadow:inset 0 0 90px var(--ev-vig,rgba(142,68,173,.5));}
+#event-vignette.ev-lockdown.show{background:rgba(0,0,0,.55);}
+#event-vignette.ev-cyber.show{filter:hue-rotate(35deg) saturate(1.6);animation:cyberGlitch .18s steps(2) infinite;}
+@keyframes cyberGlitch{
+  0%{transform:translate(0,0);}
+  50%{transform:translate(1.5px,-1.5px);}
+  100%{transform:translate(-1.5px,1px);}
+}
 </style>
 </head>
 <body>
@@ -183,7 +216,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <div class="card">
   <div class="brand"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div></div>
   <div class="gtitle"><span class="l1">PLAYGROUND</span><span class="l2">DASH</span></div>
-  <p class="tag">Dodge the chaos. Survive the school day. Beat every school. 🏃</p>
+  <p class="tag">Tell us who you are and dash through a school year in a busy playground!<br><br>The top five scores each month win prizes — we have staff room treats, boxes of glue sticks and lots more to give away!<br><br>If you'd prefer not to share your email address, we're happy to call your school instead if you're a winner.<br><br>Good luck! 🏃</p>
   <div id="sw" style="display:none">
     <div class="saved"><div class="sa" id="sav-av"></div><div style="flex:1"><div class="snm" id="sav-nm"></div><div class="ssc" id="sav-ss"></div></div><div class="chg" onclick="clearSaved()">Change</div></div>
     <button class="btn bo" onclick="playAs()">▶ &nbsp;PLAY</button>
@@ -192,8 +225,8 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
   <div id="nw">
     <div class="fl">Full name</div><input type="text" id="rn" placeholder="e.g. Miss Johnson"/>
     <div class="fl">School name</div><input type="text" id="rs" placeholder="e.g. Oakfield Primary"/>
-    <div class="fl">Email <span style="color:#223;font-size:8.5px;text-transform:none;letter-spacing:0;font-weight:600;">(private — never shown)</span></div>
-    <input type="email" id="re" placeholder="m.johnson@school.co.uk"/>
+    <div class="fl">Email <span style="color:#fff;font-size:8.5px;text-transform:none;letter-spacing:0;font-weight:600;">(optional, private — never shown)</span></div>
+    <input type="email" id="re" placeholder="m.johnson@school.co.uk (optional)"/>
     <div class="er" id="rerr"></div>
     <button class="btn bo" onclick="register()">▶ &nbsp;PLAY</button>
     <button class="btn bg" onclick="openLB()">🏆 &nbsp;Leaderboard</button>
@@ -205,11 +238,10 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <div class="card">
   <div class="brand"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div></div>
   <h2 style="font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:12px;">How to Play</h2>
-  <div class="hw"><div class="hn">1</div><div class="ht">The playground rushes <b>toward you</b> — dodge what's coming!</div></div>
+  <div class="hw"><div class="hn">1</div><div class="ht">The playground rushes <b>toward you in full 3D</b> — dodge what's coming!</div></div>
   <div class="hw"><div class="hn">2</div><div class="ht"><b>← → Arrow keys</b> or <b>swipe left/right</b> to change lane.</div></div>
   <div class="hw"><div class="hn">3</div><div class="ht"><b>↑ Space / swipe up</b> to jump over low obstacles.</div></div>
-  <div class="hw"><div class="hn">4</div><div class="ht"><b>↓ / swipe down</b> to duck under flying footballs and doors!</div></div>
-  <div class="hw"><div class="hn">5</div><div class="ht"> Grab ⭐ stars and power-ups!</div></div>
+  <div class="hw"><div class="hn">4</div><div class="ht">Watch out for surprise <b>school events</b> — Ofsted, SATs Police and more!</div></div>
   <br>
   <button class="btn bo" onclick="beginRound()">🚀 &nbsp;RUN!</button>
   <button class="btn bg" onclick="showS('s-reg')">← Back</button>
@@ -218,14 +250,14 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <!-- GAME OVER -->
 <div id="s-go" class="screen">
 <div class="card" style="text-align:center">
-  <div class="brand" style="justify-content:center;margin-bottom:10px"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div><div><div class="brt">Elementary Technology</div></div></div>
+  <div class="brand" style="justify-content:center;margin-bottom:10px"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div></div>
   <div class="gosub" id="go-stage">Autumn Term 🍂</div><div class="gosub">Game Over!</div>
   <div class="gos" id="f-sc">0</div>
-  <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#445;margin-bottom:2px;">FINAL SCORE</div>
+  <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:2px;">FINAL SCORE</div>
   <div class="gomsg" id="gomsg"></div>
   <!-- Score breakdown -->
   <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px 14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.07);">
-    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#445;font-weight:700;margin-bottom:10px;">Score Breakdown</div>
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#fff;font-weight:700;margin-bottom:10px;">Score Breakdown</div>
     <div class="score-row"><span>⭐ Stars collected</span><span id="br-stars">0 × 10 = 0</span></div>
     <div class="score-row"><span>🏃 Distance bonus</span><span id="br-dist">0</span></div>
     <div class="score-row"><span>🔥 Best combo</span><span id="br-combo">×1</span></div>
@@ -272,7 +304,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
   <div id="mult-bar">
     <div id="mult-label">×1</div>
     <div id="mult-track"><div id="mult-fill" style="width:0%"></div></div>
-    <div style="font-size:10px;color:#445;font-weight:700;">COMBO</div>
+    <div style="font-size:10px;color:#fff;font-weight:700;">COMBO</div>
   </div>
   <div id="active-pups" style="display:flex;gap:5px;margin-top:5px;padding:0 2px;flex-wrap:wrap;"></div>
 </div>
@@ -281,7 +313,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
 <div id="score-pop"></div>
 <div id="pbadge"></div>
 <div id="snd-btn" onclick="toggleSound()" title="Toggle sound">🔊</div>
-<div id="hint">swipe left/right · swipe up to jump · swipe down to slide</div>
+<div id="hint">swipe left/right · swipe up to jump</div>
 
 <div id="ofsted-warning">
   <div id="ofsted-title">📋 OFSTED INSPECTION!</div>
@@ -289,6 +321,15 @@ input:focus{border-color:#F47920;}input::placeholder{color:#223;}
   <div id="ofsted-timer">30</div>
 </div>
 <div id="ofsted-vignette"></div>
+
+<div id="event-warning">
+  <div id="event-icon">🛡️</div>
+  <div id="event-title">SAFEGUARDING ISSUE!</div>
+  <div id="event-sub">Extra scrutiny — mistakes cost more!</div>
+  <div id="event-timer">10</div>
+</div>
+<div id="event-vignette"></div>
+
 <div id="ofsted-bonus">
   <div id="ofsted-bonus-title">✅ OUTSTANDING!</div>
   <div id="ofsted-bonus-pts">+500</div>
@@ -767,28 +808,6 @@ function mkSnowman(){
   const scarf=new THREE.Mesh(new THREE.TorusGeometry(.38,.08,6,12),M.red);scarf.position.y=1.04;g.add(scarf);
   return g;
 }
-// Slide-under obstacles (high floating things)
-function mkBar(){
-  const g=new THREE.Group();
-  [-1,1].forEach(s=>{const post=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,2.4,8),M.redD);post.position.set(s*.95,1.1,0);post.castShadow=true;g.add(post);});
-  const bar=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,2.1,8),M.red);bar.rotation.z=Math.PI/2;bar.position.y=1.72;bar.castShadow=true;g.add(bar);
-  for(let i=0;i<4;i++){const s=new THREE.Mesh(new THREE.BoxGeometry(.25,.22,.14),M.yel);s.position.set(-.75+i*.5,1.72,.09);g.add(s);}
-  return g;
-}
-function mkSwingBag(){
-  const g=new THREE.Group();
-  const rope=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,1.9,6),mat(0xd4a866));rope.position.set(0,2.65,0);g.add(rope);
-  const bag=new THREE.Mesh(new THREE.BoxGeometry(.55,.72,.46),mat(0x1565c0));bag.position.y=1.78;bag.castShadow=true;g.add(bag);
-  const pkt=new THREE.Mesh(new THREE.BoxGeometry(.38,.32,.48),mat(0x1976d2));pkt.position.y=1.64;g.add(pkt);
-  return g;
-}
-function mkBall(){
-  const g=new THREE.Group();
-  const ball=new THREE.Mesh(new THREE.SphereGeometry(.44,12,10),M.white);ball.position.y=1.62;ball.castShadow=true;g.add(ball);
-  for(let i=0;i<5;i++){const a=i/5*Math.PI*2;const p=new THREE.Mesh(new THREE.BoxGeometry(.2,.2,.07),M.blk);p.position.set(Math.cos(a)*.28,1.62+Math.sin(a)*.18,.4);g.add(p);}
-  g.userData.spinRef=ball;
-  return g;
-}
 // Stars & powers
 function mkStar(){
   const g=new THREE.Group();
@@ -869,7 +888,7 @@ function mkPower(def){
 
 // Chunk pattern: array of obstacle specs
 // Each spec: { lane(0-2 or 'all'), z(0..CHUNK_LEN), type, elevated(bool) }
-// type: 'cone','bag','paint','puddle','parent','fight','snow','bar','swingbag','ball'
+// type: 'cone','bag','paint','puddle','parent','fight','snow'
 //        + structural: 'wall_L','wall_R','wall_LR' (barrier walls), 'ramp_L','ramp_R','ramp_C'
 //        + 'star' (collectible), 'power' (power-up)
 
@@ -910,19 +929,28 @@ const DIFFICULTY=[
   { baseSpeed:12.0, maxSpeed:16.0, rampRate:0.007, chunkSpacing:0.9, doubleObs:0.38, hitCDScale:0.85, label:'Hard 🟠' },
   { baseSpeed:16.0, maxSpeed:26.0, rampRate:0.012, chunkSpacing:0.65,doubleObs:0.55, hitCDScale:0.6,  label:'BRUTAL 🔴' },
 ];
+// Difficulty escalates on its own distance schedule — independent of which term is shown,
+// so removing/renaming terms never silently caps the difficulty ramp.
+const DIFF_DIST=[0,300,600,1200];
+let dist=0; // declared early — read by diffIdx() during initial chunk spawn, before the main game-state block below
+function diffIdx(){
+  let idx=0;
+  for(let i=0;i<DIFF_DIST.length;i++){ if(dist>=DIFF_DIST[i]) idx=i; }
+  return Math.min(idx,DIFFICULTY.length-1);
+}
 
 // Pattern difficulty pools
 const PAT_EASY=[0,8,10,13];
 const PAT_MED =[1,2,4,5,7];
 const PAT_HARD=[3,6,9,11,12];
 const PAT_WEIGHTS=[
-  [0.70,0.25,0.05],  // Autumn  — mostly easy
-  [0.35,0.50,0.15],  // Winter  — mix
-  [0.10,0.45,0.45],  // Spring  — mostly hard
-  [0.00,0.20,0.80],  // Summer  — almost all hard
+  [0.70,0.25,0.05],  // tier 0 — mostly easy
+  [0.35,0.50,0.15],  // tier 1 — mix
+  [0.10,0.45,0.45],  // tier 2 — mostly hard
+  [0.00,0.20,0.80],  // tier 3 — almost all hard
 ];
 function pickPattern(){
-  const w=PAT_WEIGHTS[Math.min(currentStage,PAT_WEIGHTS.length-1)];
+  const w=PAT_WEIGHTS[diffIdx()];
   const r=Math.random();
   let pool;
   if(r<w[0])           pool=PAT_EASY;
@@ -939,25 +967,25 @@ const CHUNK_PATTERNS=[
   // 2 — Wall right, ramp left + power-up
   [{t:'WALL_R',l:2,z:0},{t:'ramp',l:0,z:2},{t:'star',l:0,z:8,elevated:true},{t:'star',l:0,z:10,elevated:true},{t:'star',l:0,z:12,elevated:true},{t:'fight',l:1,z:15},{t:'cone',l:2,z:21}],
   // 3 — Two walls force middle, power-up reward
-  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'star',l:1,z:8},{t:'power',l:1,z:10},{t:'bar',l:1,z:14},{t:'star',l:1,z:18},{t:'bag',l:1,z:21}],
+  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'star',l:1,z:8},{t:'power',l:1,z:10},{t:'cone',l:1,z:14},{t:'star',l:1,z:18},{t:'bag',l:1,z:21}],
   // 4 — Bars to duck + power-up
-  [{t:'bar',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:10},{t:'bar',l:2,z:14},{t:'star',l:0,z:15},{t:'swingbag',l:1,z:19},{t:'star',l:1,z:21}],
+  [{t:'cone',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:10},{t:'bag',l:2,z:14},{t:'star',l:0,z:15},{t:'bag',l:1,z:19},{t:'star',l:1,z:21}],
   // 5 — Slalom cones + power-up in gap
   [{t:'cone',l:0,z:8},{t:'cone',l:2,z:8},{t:'star',l:1,z:9},{t:'star',l:1,z:11},{t:'cone',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'cone',l:0,z:18},{t:'cone',l:2,z:18}],
   // 6 — Wall left, ramp centre + power-up
-  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:1,z:2},{t:'star',l:1,z:8,elevated:true},{t:'power',l:1,z:9,elevated:true},{t:'parent',l:2,z:10},{t:'star',l:2,z:17},{t:'ball',l:2,z:21}],
+  [{t:'WALL_L',l:0,z:0},{t:'ramp',l:1,z:2},{t:'star',l:1,z:8,elevated:true},{t:'power',l:1,z:9,elevated:true},{t:'parent',l:2,z:10},{t:'star',l:2,z:17},{t:'fight',l:2,z:21}],
   // 7 — Wall right, stars + power-up
-  [{t:'WALL_R',l:2,z:0},{t:'snow',l:0,z:8},{t:'star',l:1,z:8},{t:'star',l:1,z:11},{t:'star',l:1,z:14},{t:'bar',l:0,z:17},{t:'star',l:1,z:21}],
+  [{t:'WALL_R',l:2,z:0},{t:'snow',l:0,z:8},{t:'star',l:1,z:8},{t:'star',l:1,z:11},{t:'star',l:1,z:14},{t:'snow',l:0,z:17},{t:'star',l:1,z:21}],
   // 8 — Puddles + power-up floating above
   [{t:'puddle',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:2,z:10},{t:'puddle',l:2,z:12},{t:'star',l:0,z:13},{t:'puddle',l:1,z:17},{t:'star',l:2,z:18}],
   // 9 — Both walls middle, power-up reward
-  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'power',l:1,z:8},{t:'star',l:1,z:11},{t:'ball',l:1,z:14},{t:'star',l:1,z:17},{t:'bar',l:1,z:20}],
+  [{t:'WALL_L',l:0,z:0},{t:'WALL_R',l:2,z:0},{t:'power',l:1,z:8},{t:'star',l:1,z:11},{t:'fight',l:1,z:14},{t:'star',l:1,z:17},{t:'cone',l:1,z:20}],
   // 10 — Open, paint + fight + power-up
   [{t:'paint',l:0,z:8},{t:'star',l:1,z:9},{t:'star',l:0,z:10},{t:'paint',l:2,z:12},{t:'fight',l:1,z:16},{t:'star',l:2,z:17},{t:'cone',l:0,z:21}],
   // 11 — Ramps both sides + power-ups on top
   [{t:'ramp',l:0,z:2},{t:'ramp',l:2,z:2},{t:'star',l:0,z:8,elevated:true},{t:'power',l:2,z:8,elevated:true},{t:'star',l:0,z:11,elevated:true},{t:'star',l:2,z:11,elevated:true},{t:'parent',l:1,z:12},{t:'fight',l:1,z:20}],
   // 12 — Mixed cone+bar + power-up
-  [{t:'cone',l:0,z:8},{t:'bar',l:2,z:8},{t:'power',l:1,z:9},{t:'cone',l:2,z:14},{t:'bar',l:0,z:14},{t:'star',l:1,z:15},{t:'snow',l:1,z:20}],
+  [{t:'cone',l:0,z:8},{t:'bag',l:2,z:8},{t:'power',l:1,z:9},{t:'cone',l:2,z:14},{t:'cone',l:0,z:14},{t:'star',l:1,z:15},{t:'snow',l:1,z:20}],
   // 13 — Bag gauntlet + power-up bonus
   [{t:'bag',l:0,z:8},{t:'bag',l:2,z:8},{t:'star',l:1,z:9},{t:'star',l:1,z:11},{t:'bag',l:1,z:13},{t:'star',l:0,z:14},{t:'star',l:2,z:14},{t:'bag',l:0,z:19}],
 ];
@@ -1016,7 +1044,7 @@ let looseCol=[];  // collectibles not in any chunk (star rain etc.)
 // ── Small emoji sprite above each obstacle (type hint only) ──
 const OBS_EMOJI={
   cone:'🚧',bag:'🎒',paint:'🎨',puddle:'💧',parent:'😤',fight:'👊',
-  snow:'☃️',bar:'🔱',swingbag:'👜',ball:'⚽',door:'🚪',kid:'🏃',ramp:'⬆️'
+  snow:'☃️',door:'🚪',kid:'🏃',ramp:'⬆️'
 };
 function makeLabelSprite(obsId){
   const canvas=document.createElement('canvas');
@@ -1078,18 +1106,16 @@ function spawnChunk(){
       return;
     }
     // Obstacle
-    const builders={cone:mkCone,bag:mkBag,paint:mkPaint,puddle:mkPuddle,parent:mkParent,fight:mkKidFight,snow:mkSnowman,bar:mkBar,swingbag:mkSwingBag,ball:mkBall};
+    const builders={cone:mkCone,bag:mkBag,paint:mkPaint,puddle:mkPuddle,parent:mkParent,fight:mkKidFight,snow:mkSnowman};
+    // hB/hT = vertical hitbox (bottom/top); hX = horizontal half-width (accurate per obstacle silhouette)
     const hitDefs={
-      cone:    {hB:0,   hT:1.4},
-      bag:     {hB:0,   hT:0.85},
-      paint:   {hB:0,   hT:0.3},
-      puddle:  {hB:0,   hT:0.2},
-      parent:  {hB:0,   hT:2.2},
-      fight:   {hB:0,   hT:2.1},
-      snow:    {hB:0,   hT:2.25},
-      bar:     {hB:1.55,hT:2.1},
-      swingbag:{hB:1.5, hT:2.25},
-      ball:    {hB:1.1, hT:2.05},
+      cone:    {hB:0,   hT:1.4,  hX:0.42},
+      bag:     {hB:0,   hT:0.85, hX:0.55},
+      paint:   {hB:0,   hT:0.3,  hX:0.65},
+      puddle:  {hB:0,   hT:0.2,  hX:0.65},
+      parent:  {hB:0,   hT:2.2,  hX:0.5},
+      fight:   {hB:0,   hT:2.1,  hX:0.65},
+      snow:    {hB:0,   hT:2.25, hX:0.55},
     };
     const build=builders[spec.t];
     if(!build)return;
@@ -1101,7 +1127,7 @@ function spawnChunk(){
     group.add(mesh);
     // Add floating label sprite above obstacle
     const hd=hitDefs[spec.t];
-    const dodgeType=hd.hB>0.8?'slide':(hd.hT<1.3?'jump':'dodge');
+    const dodgeType=hd.hT<1.3?'jump':'dodge';
     const labelSpr=makeLabelSprite(spec.t, dodgeType);
     // Position label above obstacle top, always facing camera
     labelSpr.position.set(0, hd.hT+0.9, 0);
@@ -1133,19 +1159,8 @@ const STAGES=[
     trackAccent:0xc87040,
   },
   {
-    name:'Winter Term ❄️',
-    dist:300,
-    sky:0xB8D4E8, skyTop:0x6fa8d8, skyFog:0xC8DCF0,
-    grass:0xD8E8F0,     track:0xC0D0DC,
-    ambientCol:0xD0E8FF, sunCol:0xFFFFE0,
-    particleCol:'#FFFFFF', particleCol2:'#B0D8FF',
-    fogColor:0xC8DCF0,
-    desc:'Brrr! Icy playground ahead ❄️',
-    trackAccent:0x8ab0cc,
-  },
-  {
     name:'Spring Term 🌸',
-    dist:600,
+    dist:450,
     sky:0x87CEEB, skyTop:0x3a8fd9, skyFog:0xA8DFF0,
     grass:0x7EC850,     track:0xB0C898,
     ambientCol:0xFFFFE8, sunCol:0xFFFF80,
@@ -1155,8 +1170,8 @@ const STAGES=[
     trackAccent:0x88cc88,
   },
   {
-    name:'Summer Holiday 🌞',
-    dist:1200,
+    name:'Summer Term 🌞',
+    dist:900,
     sky:0x4FC3F7, skyTop:0x1d7fc9, skyFog:0x81D4FA,
     grass:0x5CB85C,     track:0xD4C8A0,
     ambientCol:0xFFF8E1, sunCol:0xFFEB3B,
@@ -1194,7 +1209,7 @@ function updateStage(){
 // GAME STATE
 // ════════════════════════════════════════════════════════
 let GA=false,raf2=null,lastT=0,prevScreen='s-reg';
-let dist=0,starCount=0,dodged=0,pwCount=0,lives=3;
+let starCount=0,dodged=0,pwCount=0,lives=3;
 let score=0,combo=1,comboFill=0; // score multiplier system
 let speed=8.0;
 let hitCD=0,invincible=false,invTimer=0,magnetOn=false,magnetTimer=0;
@@ -1203,9 +1218,22 @@ let doubleScore=false,doubleScoreTimer=0;
 let ofstedActive=false,ofstedTimer=0,ofstedCooldown=0;
 let ofstedX=0,ofstedZ=12; // inspector world position (behind player)
 let ofstedLegPhase=0;
-const OFSTED_DURATION=30; // seconds
+const OFSTED_DURATION=16; // seconds (shortened — 30s felt too punishing)
 const OFSTED_COOLDOWN=25; // seconds between triggers
 const OFSTED_TRIGGER_DIST=200; // earliest possible trigger
+
+// ── Special school events (Safeguarding / SATs / Angry Parent / Lockdown / Cyberattack) ──
+const SPECIAL_EVENTS=[
+  {id:'safeguard',icon:'🛡️',title:'SAFEGUARDING ISSUE!',sub:'Stay extra careful out there!',dur:8,c1:'#8e44ad',c2:'#5b2c6f',vig:'rgba(142,68,173,.55)'},
+  {id:'sats',     icon:'📝',title:'SATS POLICE!',        sub:'Results day — speed up NOW!',       dur:8, c1:'#2980b9',c2:'#1b4f72',vig:'rgba(41,128,185,.5)'},
+  {id:'parent',   icon:'😠',title:'ANGRY PARENT INCOMING!',sub:'Shock is slowing your reactions!', dur:8, c1:'#d35400',c2:'#7e3006',vig:'rgba(211,84,0,.5)'},
+  {id:'lockdown', icon:'🔒',title:'SCHOOL LOCKDOWN!',    sub:'Lights out — moving blind!',         dur:9, c1:'#2c3e50',c2:'#0e1a24',vig:'rgba(0,0,0,.4)'},
+  {id:'cyber',    icon:'💻',title:'CYBERATTACK!',        sub:'Controls scrambled — left/right swapped!',dur:5,c1:'#16a085',c2:'#0b4a3d',vig:'rgba(22,160,133,.5)'},
+];
+let specialEvent=null,specialEventTimer=0,specialEventCooldown=15;
+const SPECIAL_EVENT_COOLDOWN=22; // seconds between events
+const SPECIAL_EVENT_TRIGGER_DIST=120; // earliest possible trigger
+
 let slowMo=false,slowMoTimer=0;
 let starRain=false,starRainTimer=0,starRainSpawnCD=0;
 let comboLocked=false,comboLockedTimer=0; // x5 power locks combo at max
@@ -1236,7 +1264,7 @@ function initAudio(){
     try{
       AC=new(window.AudioContext||window.webkitAudioContext)();
       musicGain=AC.createGain();musicGain.gain.value=0.22;musicGain.connect(AC.destination);
-      sfxGain=AC.createGain();sfxGain.gain.value=0.55;sfxGain.connect(AC.destination);
+      sfxGain=AC.createGain();sfxGain.gain.value=0.75;sfxGain.connect(AC.destination);
       document.getElementById('snd-btn').classList.add('show');
       buildFXChain();
     }catch(e){console.warn('Web Audio not supported');}
@@ -1293,9 +1321,32 @@ function sfxDoubleScore(){[440,880].forEach((f,i)=>osc(f,'sine',0.2,0.4,sfxGain,
 function sfxSlowMo(){osc(300,'sine',0.15,0.3);osc(150,'sine',0.2,0.25,sfxGain,0.1);}
 function sfxShield(){[392,523,659,784].forEach((f,i)=>osc(f,'sine',0.14,0.35,sfxGain,i*0.06));}
 function sfxHit(){
-  noise(0.18,0.5);
-  osc(80,'sawtooth',0.2,0.4);
-  osc(160,'square',0.15,0.25,sfxGain,0.05);
+  if(!AC)return;
+  // Deep bass thud
+  const o1=AC.createOscillator(),g1=AC.createGain();
+  o1.type='sine';o1.frequency.setValueAtTime(120,AC.currentTime);
+  o1.frequency.exponentialRampToValueAtTime(40,AC.currentTime+0.18);
+  g1.gain.setValueAtTime(1.0,AC.currentTime);
+  g1.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+0.22);
+  o1.connect(g1);g1.connect(sfxGain);o1.start();o1.stop(AC.currentTime+0.25);
+  // Crunchy noise burst
+  const bufLen=Math.floor(AC.sampleRate*0.12);
+  const buf=AC.createBuffer(1,bufLen,AC.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<bufLen;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/bufLen,1.5);
+  const ns=AC.createBufferSource(),ng=AC.createGain();
+  const nf=AC.createBiquadFilter();nf.type='bandpass';nf.frequency.value=600;nf.Q.value=1.2;
+  ng.gain.setValueAtTime(0.9,AC.currentTime);
+  ng.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+0.12);
+  ns.buffer=buf;ns.connect(nf);nf.connect(ng);ng.connect(sfxGain);ns.start();ns.stop(AC.currentTime+0.14);
+  // Descending "ouch" tone
+  const o2=AC.createOscillator(),g2=AC.createGain();
+  o2.type='sawtooth';o2.frequency.setValueAtTime(320,AC.currentTime+0.05);
+  o2.frequency.exponentialRampToValueAtTime(80,AC.currentTime+0.28);
+  g2.gain.setValueAtTime(0,AC.currentTime+0.05);
+  g2.gain.linearRampToValueAtTime(0.5,AC.currentTime+0.08);
+  g2.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+0.3);
+  o2.connect(g2);g2.connect(sfxGain);o2.start(AC.currentTime+0.05);o2.stop(AC.currentTime+0.32);
 }
 function sfxSlide(){osc(200,'sine',0.08,0.2);osc(150,'sine',0.1,0.15,sfxGain,0.05);}
 function sfxCombo(level){
@@ -1360,7 +1411,7 @@ function register(){
   const er=document.getElementById('rerr');
   if(!nm){er.textContent='Please enter your name.';return;}
   if(!sc){er.textContent='Please enter your school name.';return;}
-  if(!em||!em.includes('@')){er.textContent='Please enter a valid email.';return;}
+  if(em&&!em.includes('@')){er.textContent='Please enter a valid email, or leave it blank.';return;}
   er.textContent='';
   PL={name:nm,school:sc,email:em,best:PL.best||0};
   saveP();showS('s-how');
@@ -1398,8 +1449,12 @@ function resetGame(){
   INSPECTOR.root.visible=false;
   document.getElementById('ofsted-warning').classList.remove('show');
   document.getElementById('ofsted-vignette').classList.remove('show');
+  specialEvent=null;specialEventTimer=0;specialEventCooldown=15;
+  document.getElementById('event-warning').classList.remove('show');
+  document.getElementById('event-vignette').className='';
   starRain=false;starRainTimer=0;starRainSpawnCD=0;comboLocked=false;comboLockedTimer=0;
   nextMilestone=0;particles2d=[];
+  currentStage=0;stageEntryDist=0;document.body.classList.remove('brutal-mode');updateStage();
   // Clear chunks
   activeChunks.forEach(c=>scene.remove(c.group));
   looseCol.forEach(c=>scene.remove(c.mesh));
@@ -1427,13 +1482,12 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft' ||e.key==='a'){e.preventDefault();doLane(-1);}
   if(e.key==='ArrowRight'||e.key==='d'){e.preventDefault();doLane(1);}
   if(e.key===' '||e.key==='ArrowUp'||e.key==='w'){e.preventDefault();doJump();}
-  if(e.key==='ArrowDown' ||e.key==='s'){e.preventDefault();doSlide();}
 });
 
 // Touch — non-passive so we can preventDefault (stops browser scroll/zoom)
 document.addEventListener('touchstart',e=>{
   // Don't interfere with input fields or buttons on UI screens
-  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA') return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA'||e.target.closest('#snd-btn')) return;
   if(!GA) return; // don't block menu touches
   e.preventDefault();
   tSX=e.touches[0].clientX;
@@ -1443,7 +1497,7 @@ document.addEventListener('touchstart',e=>{
 
 // Act on touchmove as soon as threshold crossed — feels instant like Subway Surfers
 document.addEventListener('touchmove',e=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA') return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA'||e.target.closest('#snd-btn')) return;
   if(!GA||tSwiped)return;
   e.preventDefault();
   const dx=e.touches[0].clientX-tSX;
@@ -1455,17 +1509,16 @@ document.addEventListener('touchmove',e=>{
     tSwiped=true;
     if(dx<0)doLane(-1); else doLane(1);
     flashSwipeHint(dx<0?'←':'→');
-  } else if(ay>THRESH_V&&ay>ax){
-    // Vertical swipe
+  } else if(ay>THRESH_V&&ay>ax&&dy<0){
+    // Vertical swipe up — jump (swipe down no longer has an action)
     tSwiped=true;
-    if(dy<0){ doJump(); flashSwipeHint('↑'); }
-    else     { doSlide();flashSwipeHint('↓'); }
+    doJump(); flashSwipeHint('↑');
   }
 },{passive:false});
 
 // Touchend — handle tap (very short touch with no real movement)
 document.addEventListener('touchend',e=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA') return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.tagName==='TEXTAREA'||e.target.closest('#snd-btn')) return;
   if(!GA||tSwiped)return;
   e.preventDefault();
   const dx=e.changedTouches[0].clientX-tSX;
@@ -1488,6 +1541,8 @@ function flashSwipeHint(arrow){
 }
 
 function doLane(d){
+  // Cyberattack event: controls scrambled — left/right swapped
+  if(specialEvent&&specialEvent.id==='cyber') d=-d;
   const nl=Math.max(0,Math.min(2,pTargetLane+d));
   if(nl!==pTargetLane){pTargetLane=nl;dodged++;}
 }
@@ -1496,10 +1551,6 @@ function doJump(){
     pVY=JUMP_V;pState='jump';sfxJump();
   }
 }
-function doSlide(){
-  if(pState!=='slide'){pState='slide';pSlide=0.42;sfxSlide();}
-}
-
 // ════════════════════════════════════════════════════════
 // MAIN LOOP
 // ════════════════════════════════════════════════════════
@@ -1514,7 +1565,7 @@ function loop(t){
 function update(dt){
   // Speed: starts 8, reaches 20 by 1500m
   // Stage-based speed ramp
-  {const diff=DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)];
+  {const diff=DIFFICULTY[diffIdx()];
    const tgt=Math.min(diff.maxSpeed,diff.baseSpeed+(dist-stageEntryDist)*diff.rampRate);
    if(!slowMo) speed+=(tgt-speed)*0.02;
    speed=Math.max(diff.baseSpeed*0.8,speed);}
@@ -1534,7 +1585,7 @@ function update(dt){
   activeChunks.forEach(c=>c.group.position.z+=dz);
   // Maintain a pipeline of chunks ahead; spawn when the furthest chunk is within sight
   const furthest=activeChunks.length>0?activeChunks[activeChunks.length-1]:null;
-  const _diff=DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)];
+  const _diff=DIFFICULTY[diffIdx()];
   const spawnThresh=CHUNK_SPAWN_Z+CHUNK_LEN*(_diff.chunkSpacing||1.0);
   if(!furthest||(furthest.group.position.z+CHUNK_LEN)>spawnThresh){
     spawnChunk();
@@ -1572,7 +1623,6 @@ function update(dt){
     pY+=pVY*dt;pVY-=GRAVITY*dt;
     if(pY<=pFloor){pY=pFloor;pVY=0;pState=pFloor>0.05?'run':'land';if(pFloor<0.05){pSlide=0.08;sfxLand();}}
   } else if(pState==='land'){pY=pFloor;pSlide-=dt;if(pSlide<=0)pState='run';}
-  else if(pState==='slide'){pY=pFloor;pSlide-=dt;if(pSlide<=0)pState='run';}
   else{pY=pFloor;}
 
   // ── Timers ──
@@ -1609,6 +1659,27 @@ function update(dt){
     }
     if(ofstedTimer<=0) endOfsted(true);
   }
+
+  // ── Special school events ──
+  if(specialEventCooldown>0) specialEventCooldown-=dt;
+  if(!specialEvent&&!ofstedActive&&specialEventCooldown<=0&&dist>SPECIAL_EVENT_TRIGGER_DIST&&Math.random()<dt*0.03){
+    triggerSpecialEvent();
+  }
+  if(specialEvent){
+    specialEventTimer-=dt;
+    const timerEl=document.getElementById('event-timer');
+    if(timerEl) timerEl.textContent=Math.max(0,Math.ceil(specialEventTimer));
+    if(specialEvent.id==='sats'){
+      // SATs Police: forced pace — speed is pushed up beyond the normal ramp
+      const capSpeed=DIFFICULTY[diffIdx()].maxSpeed*1.2;
+      speed=Math.min(capSpeed,speed+dt*3.2);
+    }
+    if(specialEvent.id==='parent'){
+      // Angry Parent: purely cosmetic screen-shake wobble, no control penalty
+      shakeMag=Math.max(shakeMag,0.08+Math.sin(Date.now()/90)*0.05);
+    }
+    if(specialEventTimer<=0) endSpecialEvent();
+  }
   if(invincible){invTimer-=dt*1000;if(invTimer<=0){invincible=false;}}
   if(magnetOn){magnetTimer-=dt*1000;if(magnetTimer<=0)magnetOn=false;}
   if(doubleScore){doubleScoreTimer-=dt*1000;if(doubleScoreTimer<=0)doubleScore=false;}
@@ -1638,8 +1709,7 @@ function update(dt){
   // (actual speed var untouched so distance still accumulates normally)
 
   // ── Collision & collection ──
-  const pSliding=pState==='slide';
-  const pH=pSliding?P_HEIGHT_SLIDE:P_HEIGHT_STAND;
+  const pH=P_HEIGHT_STAND;
   const pTop=pY+pH;
   const pBot=pY;
 
@@ -1733,17 +1803,15 @@ function update(dt){
       // ── Obstacle collision ──
       if(prop.isObs&&!prop.hit&&!invincible&&hitCD<=0){
         // Z window: 1.5 units deep (tight — only when obstacle is right at player)
-        // X window: 0.75 units either side of centre (tighter than before)
-        if(worldZ>1.0&&worldZ<2.5&&Math.abs(worldX-pX)<0.75){
-          // Vertical AABB with per-type grace margins:
-          // Ground obstacles: generous top margin (0.28) so jumping clears them easily
-          // Floating obstacles: generous bottom margin so sliding clears them easily
-          const isFloating=prop.hB>0.5;
-          const topGrace   = isFloating ? 0.12 : 0.28;  // top of player must clear obs top
-          const bottomGrace= isFloating ? 0.32 : 0.10;  // obs bottom must clear player bottom
+        // X window: per-obstacle half-width, matched to its actual silhouette (more accurate hitbox)
+        const hitX=prop.hX!=null?prop.hX:0.55;
+        if(worldZ>1.0&&worldZ<2.5&&Math.abs(worldX-pX)<hitX){
+          // Vertical AABB — small top grace so jumping cleanly clears obstacles
+          const safeguardActive=specialEvent&&specialEvent.id==='safeguard';
+          const topGrace=safeguardActive?0.17:0.22, bottomGrace=safeguardActive?0.045:0.06;
           const vertOverlap=(pTop>prop.hB+bottomGrace)&&(pBot<prop.hT-topGrace);
           if(vertOverlap){
-            prop.hit=true;hitCD=1.6*DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)].hitCDScale;lives--;shakeMag=0.4;
+            prop.hit=true;hitCD=1.6*DIFFICULTY[diffIdx()].hitCDScale;lives--;shakeMag=0.4;
             combo=1;comboFill=0; // reset combo on hit
             sfxHit();
             updateHUD();if(lives<=0)setTimeout(endGame,300);
@@ -1762,7 +1830,7 @@ function update(dt){
       currentStage++;
       stageEntryDist=dist;
       updateStage();
-      if(currentStage>=3) document.body.classList.add('brutal-mode');
+      if(diffIdx()>=3) document.body.classList.add('brutal-mode');
       else document.body.classList.remove('brutal-mode');
       showMilestone(STAGES[currentStage].name);
       sfxMilestone();
@@ -1856,16 +1924,11 @@ function activatePower(def){
 function animPlayer(dt){
   const r=PLAYER.root;
   r.position.set(pX,pY,0);
-  const isSlide=pState==='slide';
-  if(isSlide){
-    r.scale.set(1,.55,1);r.position.y=pY-0.25;
-  }else{
-    r.scale.set(1,1,1);
-    const sw=Math.sin(pLegPhase)*.58;
-    PLAYER.legL.rotation.x=sw;PLAYER.legR.rotation.x=-sw;
-    PLAYER.armL.rotation.x=-sw*.7+(pState==='jump'?-.7:0);
-    PLAYER.armR.rotation.x=sw*.7+(pState==='jump'?-.7:0);
-  }
+  r.scale.set(1,1,1);
+  const sw=Math.sin(pLegPhase)*.58;
+  PLAYER.legL.rotation.x=sw;PLAYER.legR.rotation.x=-sw;
+  PLAYER.armL.rotation.x=-sw*.7+(pState==='jump'?-.7:0);
+  PLAYER.armR.rotation.x=sw*.7+(pState==='jump'?-.7:0);
   const lean=(LANES[pTargetLane]-pX)*.08;
   r.rotation.z+=(lean-r.rotation.z)*.2;
   PLAYER.head.position.y=1.82+Math.sin(pLegPhase*2)*.022;
@@ -1876,7 +1939,7 @@ function animPlayer(dt){
 function updateHUD(){
   document.getElementById('h-dist').textContent=Math.floor(dist)+'m';
   document.getElementById('h-score').textContent=score.toLocaleString();
-  const _db=document.getElementById('diff-badge');if(_db){const _d=DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)];_db.textContent=_d.label;}
+  const _db=document.getElementById('diff-badge');if(_db){const _d=DIFFICULTY[diffIdx()];_db.textContent=_d.label;}
   for(let i=1;i<=3;i++)document.getElementById('hrt'+i).className='hrt'+(i>lives?' dead':'');
   document.getElementById('mult-label').textContent='×'+combo;
   document.getElementById('mult-fill').style.width=(comboFill*100)+'%';
@@ -1975,9 +2038,8 @@ function showMilestone(txt, icon, label){
   // Determine icon and label from text if not provided
   if(!icon){
     if(txt.includes('🍂')){icon='🍂';label='AUTUMN TERM';}
-    else if(txt.includes('❄️')){icon='❄️';label='WINTER TERM';}
     else if(txt.includes('🌸')){icon='🌸';label='SPRING TERM';}
-    else if(txt.includes('🌞')){icon='☀️';label='SUMMER HOLIDAY';}
+    else if(txt.includes('🌞')){icon='☀️';label='SUMMER TERM';}
     else if(txt.includes('m!')){icon='🏃';label='DISTANCE';}
     else{icon='🎉';label='MILESTONE';}
   }
@@ -2019,7 +2081,7 @@ function triggerOfsted(){
   // Red vignette
   document.getElementById('ofsted-vignette').classList.add('show');
   // Speed boost during inspection (panic!)
-  speed=Math.min(speed*1.35, DIFFICULTY[Math.min(currentStage,DIFFICULTY.length-1)].maxSpeed*1.1);
+  speed=Math.min(speed*1.35, DIFFICULTY[diffIdx()].maxSpeed*1.1);
   // Sound — urgent alarm
   if(AC){
     [440,550,440,550,440].forEach((f,i)=>osc(f,'square',0.12,0.3,sfxGain,i*0.14));
@@ -2048,6 +2110,40 @@ function endOfsted(survived){
     spawn2dParticles({x:pX,y:1.5,z:0},{},'#27ae60','#ffd84d');
     updateHUD();
   }
+}
+
+// ════════════════════════════════════════════════════════
+// SPECIAL SCHOOL EVENTS
+// ════════════════════════════════════════════════════════
+function triggerSpecialEvent(){
+  const ev=SPECIAL_EVENTS[Math.floor(Math.random()*SPECIAL_EVENTS.length)];
+  specialEvent=ev;
+  specialEventTimer=ev.dur;
+  specialEventCooldown=SPECIAL_EVENT_COOLDOWN;
+
+  const w=document.getElementById('event-warning');
+  const vg=document.getElementById('event-vignette');
+  document.getElementById('event-icon').textContent=ev.icon;
+  document.getElementById('event-title').textContent=ev.title;
+  document.getElementById('event-sub').textContent=ev.sub;
+  w.style.setProperty('--ev-c1',ev.c1);
+  w.style.setProperty('--ev-c2',ev.c2);
+  vg.style.setProperty('--ev-vig',ev.vig);
+  w.classList.add('show');
+  setTimeout(()=>w.classList.remove('show'),3200);
+  vg.className='show ev-'+ev.id;
+
+  // Alert sound
+  if(AC){[392,330,392,330].forEach((f,i)=>osc(f,'square',0.1,0.28,sfxGain,i*0.13));}
+  showMilestone(ev.icon+' '+ev.title);
+}
+
+function endSpecialEvent(){
+  if(!specialEvent)return;
+  const id=specialEvent.id;
+  document.getElementById('event-vignette').classList.remove('show');
+  specialEvent=null;
+  specialEventTimer=0;
 }
 
 // ════════════════════════════════════════════════════════
