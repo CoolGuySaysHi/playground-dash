@@ -154,16 +154,16 @@ input:focus{border-color:#F47920;}input::placeholder{color:rgba(255,255,255,.4);
 
 /* Inspector survived bonus popup */
 #ofsted-bonus{
-  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+  position:fixed;top:0;left:0;right:0;
+  transform:translateY(-100%);
   z-index:70;pointer-events:none;
-  background:linear-gradient(135deg,rgba(39,174,96,.95),rgba(27,120,68,.95));
-  border:1.5px solid rgba(255,255,255,.25);border-radius:14px;
-  padding:12px 22px;text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;
+  background:linear-gradient(135deg,rgba(39,174,96,.97),rgba(27,120,68,.97));
+  border-bottom:3px solid rgba(255,255,255,.35);
+  padding:12px 20px 14px;text-align:center;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+  transition:transform .35s cubic-bezier(.34,1.2,.64,1);
 }
-#ofsted-bonus.show{transform:translate(-50%,-50%) scale(1);}
-#ofsted-bonus.hide{opacity:0;}
+#ofsted-bonus.show{transform:translateY(0);}
 #ofsted-bonus-title{font-family:'Fredoka One',cursive;font-size:22px;color:#fff;}
 #ofsted-bonus-pts{font-family:'Fredoka One',cursive;font-size:36px;color:#ffd84d;}
 #ofsted-bonus-sub{font-size:12px;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:2px;margin-top:4px;}
@@ -216,6 +216,8 @@ input:focus{border-color:#F47920;}input::placeholder{color:rgba(255,255,255,.4);
 <div class="card">
   <div class="brand"><div class="badge"><img src="logo.png" alt="ET" onerror="this.style.display='none'"></div></div>
   <div class="gtitle"><span class="l1">PLAYGROUND</span><span class="l2">DASH</span></div>
+  <div class="gtitle"></div>
+  <p style="font-size:16px;font-weight:800;line-height:1.35;margin-bottom:10px;background:linear-gradient(90deg,#F47920,#ff6bab,#4fb3f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Dodge the chaos, survive the school day. 🏃</p>
   <p class="tag">Tell us who you are and dash through a school year in a busy playground!<br><br>The top five scores each month win prizes — we have staff room treats, boxes of glue sticks and lots more to give away!<br><br>If you'd prefer not to share your email address, we're happy to call your school instead if you're a winner.<br><br>Good luck! 🏃</p>
   <div id="sw" style="display:none">
     <div class="saved"><div class="sa" id="sav-av"></div><div style="flex:1"><div class="snm" id="sav-nm"></div><div class="ssc" id="sav-ss"></div></div><div class="chg" onclick="clearSaved()">Change</div></div>
@@ -254,6 +256,8 @@ input:focus{border-color:#F47920;}input::placeholder{color:rgba(255,255,255,.4);
   <div class="gosub" id="go-stage">Autumn Term 🍂</div><div class="gosub">Game Over!</div>
   <div class="gos" id="f-sc">0</div>
   <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:2px;">FINAL SCORE</div>
+  <button class="btn bp" onclick="beginRound()">↺ &nbsp;Run Again</button>
+  <div style="height:9px"></div>
   <div class="gomsg" id="gomsg"></div>
   <!-- Score breakdown -->
   <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px 14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.07);">
@@ -275,7 +279,7 @@ input:focus{border-color:#F47920;}input::placeholder{color:rgba(255,255,255,.4);
   </div>
   <div class="ss2" id="go-st"></div>
   <button class="btn bo" onclick="openLB()">🏆 &nbsp;Leaderboard</button>
-  <button class="btn bp" onclick="beginRound()">↺ &nbsp;Run Again</button>
+  <button class="btn bg" id="share-btn2" onclick="shareGame()">📤 &nbsp;Share with a colleague</button>
   <button class="btn bg" onclick="showS('s-reg')">Change details</button>
 </div></div>
 
@@ -1224,7 +1228,7 @@ const OFSTED_TRIGGER_DIST=200; // earliest possible trigger
 
 // ── Special school events (Safeguarding / SATs / Angry Parent / Lockdown / Cyberattack) ──
 const SPECIAL_EVENTS=[
-  {id:'safeguard',icon:'🛡️',title:'SAFEGUARDING ISSUE!',sub:'Stay extra careful out there!',dur:8,c1:'#8e44ad',c2:'#5b2c6f',vig:'rgba(142,68,173,.55)'},
+  {id:'safeguard',icon:'🛡️',title:'SAFEGUARDING ISSUE!',sub:'Everything slows down — stay alert!',dur:8,c1:'#8e44ad',c2:'#5b2c6f',vig:'rgba(142,68,173,.55)'},
   {id:'sats',     icon:'📝',title:'SATS POLICE!',        sub:'Results day — speed up NOW!',       dur:8, c1:'#2980b9',c2:'#1b4f72',vig:'rgba(41,128,185,.5)'},
   {id:'parent',   icon:'😠',title:'ANGRY PARENT INCOMING!',sub:'Shock is slowing your reactions!', dur:8, c1:'#d35400',c2:'#7e3006',vig:'rgba(211,84,0,.5)'},
   {id:'lockdown', icon:'🔒',title:'SCHOOL LOCKDOWN!',    sub:'Lights out — moving blind!',         dur:9, c1:'#2c3e50',c2:'#0e1a24',vig:'rgba(0,0,0,.4)'},
@@ -1281,6 +1285,28 @@ function toggleSound(){
   document.getElementById('snd-btn').textContent=musicOn?'🔊':'🔇';
 }
 
+function shareGame(){
+  const url=window.location.href;
+  const shareData={
+    title:'Playground Dash — Elementary Technology',
+    text:'I just played Playground Dash — see if you can beat my score!',
+    url:url
+  };
+  const btn=document.getElementById('share-btn2');
+  const resetBtn=(txt)=>{ if(!btn)return; const orig='📤 &nbsp;Share with a colleague'; btn.textContent=txt; setTimeout(()=>{btn.innerHTML=orig;},2000); };
+  if(navigator.share){
+    navigator.share(shareData).catch(()=>{});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>{
+      resetBtn('✅ Link copied!');
+    }).catch(()=>{
+      window.prompt('Copy this link to share:',url);
+    });
+  } else {
+    window.prompt('Copy this link to share:',url);
+  }
+}
+
 // ── Synth helpers ──
 function osc(freq,type,dur,gain=0.3,dest=sfxGain,startTime=0){
   if(!AC)return;
@@ -1292,6 +1318,26 @@ function osc(freq,type,dur,gain=0.3,dest=sfxGain,startTime=0){
   g.gain.exponentialRampToValueAtTime(0.001,t+dur);
   o.connect(g);g.connect(dest);
   o.start(t);o.stop(t+dur);
+}
+function sfxSiren(duration=8){
+  if(!AC)return;
+  const t0=AC.currentTime;
+  const o=AC.createOscillator();
+  const g=AC.createGain();
+  o.type='sawtooth';
+  o.connect(g);g.connect(sfxGain);
+  g.gain.setValueAtTime(0.16,t0);
+  o.frequency.setValueAtTime(500,t0);
+  let t=t0;
+  const cycles=Math.ceil(duration/0.8);
+  for(let i=0;i<cycles;i++){
+    o.frequency.linearRampToValueAtTime(900,t+0.4);
+    o.frequency.linearRampToValueAtTime(500,t+0.8);
+    t+=0.8;
+  }
+  g.gain.setValueAtTime(0.16,t0+Math.max(0,duration-0.3));
+  g.gain.linearRampToValueAtTime(0.0001,t0+duration);
+  o.start(t0);o.stop(t0+duration+0.05);
 }
 function noise(dur,gain=0.15,dest=sfxGain){
   if(!AC)return;
@@ -1678,6 +1724,10 @@ function update(dt){
       // Angry Parent: purely cosmetic screen-shake wobble, no control penalty
       shakeMag=Math.max(shakeMag,0.08+Math.sin(Date.now()/90)*0.05);
     }
+    if(specialEvent.id==='safeguard'){
+      // Safeguarding Issue: everything moves in slow motion for the duration
+      slowMo=true;slowMoTimer=Math.max(slowMoTimer,300);
+    }
     if(specialEventTimer<=0) endSpecialEvent();
   }
   if(invincible){invTimer-=dt*1000;if(invTimer<=0){invincible=false;}}
@@ -1807,8 +1857,7 @@ function update(dt){
         const hitX=prop.hX!=null?prop.hX:0.55;
         if(worldZ>1.0&&worldZ<2.5&&Math.abs(worldX-pX)<hitX){
           // Vertical AABB — small top grace so jumping cleanly clears obstacles
-          const safeguardActive=specialEvent&&specialEvent.id==='safeguard';
-          const topGrace=safeguardActive?0.17:0.22, bottomGrace=safeguardActive?0.045:0.06;
+          const topGrace=0.22, bottomGrace=0.06;
           const vertOverlap=(pTop>prop.hB+bottomGrace)&&(pBot<prop.hT-topGrace);
           if(vertOverlap){
             prop.hit=true;hitCD=1.6*DIFFICULTY[diffIdx()].hitCDScale;lives--;shakeMag=0.4;
@@ -2103,7 +2152,7 @@ function endOfsted(survived){
     const b=document.getElementById('ofsted-bonus');
     document.getElementById('ofsted-bonus-pts').textContent='+'+bonus.toLocaleString();
     b.className='show';
-    setTimeout(()=>{b.classList.add('hide');setTimeout(()=>b.className='',400);},2500);
+    setTimeout(()=>{b.className='';},2800);
     // Triumphant sound
     if(AC)[523,659,784,1047,1319].forEach((f,i)=>osc(f,'sine',0.2,0.35,sfxGain,i*0.08));
     showMilestone('✅ OUTSTANDING! +'+bonus);
@@ -2134,7 +2183,8 @@ function triggerSpecialEvent(){
   vg.className='show ev-'+ev.id;
 
   // Alert sound
-  if(AC){[392,330,392,330].forEach((f,i)=>osc(f,'square',0.1,0.28,sfxGain,i*0.13));}
+  if(ev.id==='lockdown'){ sfxSiren(ev.dur); }
+  else if(AC){[392,330,392,330].forEach((f,i)=>osc(f,'square',0.1,0.28,sfxGain,i*0.13));}
   showMilestone(ev.icon+' '+ev.title);
 }
 
@@ -2142,6 +2192,7 @@ function endSpecialEvent(){
   if(!specialEvent)return;
   const id=specialEvent.id;
   document.getElementById('event-vignette').classList.remove('show');
+  if(id==='safeguard'){slowMo=false;slowMoTimer=0;}
   specialEvent=null;
   specialEventTimer=0;
 }
@@ -2197,7 +2248,7 @@ function endGame(){
   document.getElementById('g-best').textContent=distM+'m';
   document.getElementById('g-pw').textContent=pwCount;
 
-  const msgs=[[2000,'🏆 LEGENDARY! Top of the class!'],[1000,'🎉 Outstanding — nothing phases you!'],[500,'👏 Seriously impressive!'],[200,'👍 Good run! Go again?'],[0,'😅 Rough day in the playground!']];
+  const msgs=[[2000,'🏆 LEGENDARY! Top of the class!'],[1000,'🎉 Outstanding — nothing fazes you!'],[500,'👏 Seriously impressive!'],[200,'👍 Good run! Go again?'],[0,'😅 Rough day in the playground!']];
   document.getElementById('gomsg').textContent=msgs.find(m=>finalScore>=m[0])[1];
   showS('s-go');submitScore(bestVal);
 }
@@ -2230,7 +2281,7 @@ function renderRows(rows,isP){
   const ts=['gd','si','br'];
   list.innerHTML=rows.slice(0,20).map((r,i)=>{
     const t=ts[i]||'',yu=r.school===PL.school||(isP&&r.name===PL.name);
-    return`<div class="lbr ${t}${yu?' yu':''}"><div class="lbm">${i<3?MDS[i]:'<span class="lbrk">'+(i+1)+'</span>'}</div><div class="lbi"><div class="lbn">${esc(isP?r.name:r.school)}${yu?'<span class="ytag">YOU</span>':''}</div>${isP?`<div class="lbsb">${esc(r.school)}</div>`:''}</div><div class="lbsc">${r.score}m</div></div>`;
+    return`<div class="lbr ${t}${yu?' yu':''}"><div class="lbm">${i<3?MDS[i]:'<span class="lbrk">'+(i+1)+'</span>'}</div><div class="lbi"><div class="lbn">${esc(isP?r.name:r.school)}${yu?'<span class="ytag">YOU</span>':''}</div>${isP?`<div class="lbsb">${esc(r.school)}</div>`:''}</div><div class="lbsc">${(r.score||0).toLocaleString()}</div></div>`;
   }).join('');
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
